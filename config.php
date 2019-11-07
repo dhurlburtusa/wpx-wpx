@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 
 require_once __DIR__ . '/src/__init__.php';
 
-if ( ! defined( 'WPX__VERSION' ) ) {
+if ( ! function_exists( 'Wpx\configure_heartbeat' ) ) {
 
 	/**
 	* Configures the WP heartbeat.
