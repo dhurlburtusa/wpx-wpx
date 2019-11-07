@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 
 if ( ! defined( 'WPX__VERSION' ) ) {
-	define( 'WPX__VERSION', '0.0.0-alpha6' );
+	define( 'WPX__VERSION', '0.0.0-alpha7' );
 
 	global $wpx;
 
