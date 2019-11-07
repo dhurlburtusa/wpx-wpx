@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 * }
 */
 function configure_heartbeat ( $config ) {
-	if ( $config['disable'] === TRUE ) {
+	if ( isset( $config['disable'] ) && $config['disable'] === TRUE ) {
 		add_action( 'init', function () {
 			wp_deregister_script( 'heartbeat' );
 		}, 1 );
