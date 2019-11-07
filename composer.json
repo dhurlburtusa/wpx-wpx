@@ -1,0 +1,28 @@
+{
+	"name": "dhurlburtusa/wpx",
+	"description": "A library to make building WordPress plugins and themes easier.",
+	"keywords": [
+		"library",
+		"plugins",
+		"themes",
+		"WordPress"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Danny Hurlburt",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/dhurlburtusa/wpx/issues"
+	},
+	"autoload": {
+		"psr-4": {
+			"Wpx\\": "src"
+		}
+	},
+	"require": {
+		"php": "^5.6.20"
+	}
+}
