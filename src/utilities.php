@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 *     	'interval' => 60,
 *     ] );
 *
-* @since WPX 0.0.0-alpha
+* @since WPX 0.0.0
 *
 * @param array $config {
 *     WP heartbeat configuration.
