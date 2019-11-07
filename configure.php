@@ -3,7 +3,7 @@ namespace Wpx;
 
 if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 
-require_once __DIR__ . '/src/__init__.php';
+require_once __DIR__ . '/__init__.php';
 
 if ( ! function_exists( __NAMESPACE__ . '\configure_heartbeat' ) ) {
 
