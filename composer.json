@@ -1,5 +1,5 @@
 {
-	"name": "dhurlburtusa/wpx",
+	"name": "wpx/wpx",
 	"description": "A library to make building WordPress plugins and themes easier.",
 	"keywords": [
 		"library",
@@ -16,11 +16,6 @@
 	],
 	"support": {
 		"issues": "https://github.com/dhurlburtusa/wpx/issues"
-	},
-	"autoload": {
-		"psr-4": {
-			"Wpx\\": "src"
-		}
 	},
 	"require": {
 		"php": "^5.6.20 || ^7"
