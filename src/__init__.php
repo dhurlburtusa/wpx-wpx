@@ -25,11 +25,4 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 			),
 		),
 	);
-
-	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-		add_action( 'shutdown', function () {
-			global $wpx;
-			$wpx['state']['request']['end'] = microtime( TRUE );
-		}, 9998 );
-	}
 }

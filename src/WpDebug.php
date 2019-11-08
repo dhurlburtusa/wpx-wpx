@@ -53,6 +53,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						$starttime = $wpx['state']['request']['start'];
 						$endtime = $wpx['state']['request']['end'];
 
+						if ( ! is_numeric( $endtime ) ) {
+							$endtime = $wpx['state']['request']['end'] = microtime( true );
+						}
+
 						$duration_us = number_format( 1000000 * ($endtime - $starttime) );
 
 						error_log( "Approx. request execution time: {$duration_us} μs." );
