@@ -74,6 +74,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'rest_api' => [
 		*     		'must_be_authenticated' => true,
 		*     	],
+		*     	'self_pinging' => false,
 		*     	'texturization' => false,
 		*     	'wp_cron' => [
 		*     		'disable' => true,
@@ -87,19 +88,19 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @param array $config {
 		*     The WP configuration.
 		*
-		*     @type array $autop Optional. The WP "autop"ing configuration. See
+		*     @type array|false $autop Optional. The WP "autop"ing configuration. See
 		*       `\Wpx\configure_autop` for details.
-		*     @type array $blog_feed Optional. The WP blog feed configuration. See
+		*     @type array|false $blog_feed Optional. The WP blog feed configuration. See
 		*       `\Wpx\configure_blog_feed` for details.
-		*     @type array $capital_p Optional. The WP capital P functionality configuration.
+		*     @type array|false $capital_p Optional. The WP capital P functionality configuration.
 		*       See `\Wpx\configure_capital_p` for details.
-		*     @type array $emojis Optional. The WP emojis configuration. See
+		*     @type array|false $emojis Optional. The WP emojis configuration. See
 		*       `\Wpx\configure_emojis` for details.
-		*     @type array $heartbeat Optional. The WP heartbeat configuration. See
+		*     @type array|false $heartbeat Optional. The WP heartbeat configuration. See
 		*       `\Wpx\configure_heartbeat` for details.
-		*     @type array $oembed_provider_support Optional. The WP oEmbed provider support
+		*     @type array|false $oembed_provider_support Optional. The WP oEmbed provider support
 		*       configuration. See `\Wpx\configure_oembed_provider_support` for details.
-		*     @type array $plugin_and_theme_editors Optional. The plugin and theme editors
+		*     @type array|false $plugin_and_theme_editors Optional. The plugin and theme editors
 		*       configuration. See `\Wpx\configure_plugin_and_theme_editors` for details.
 		*     @type array $post_autosave Optional. The WP post autosave configuration. See
 		*       `\Wpx\configure_post_autosave` for details.
@@ -107,7 +108,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_post_revisions` for details.
 		*     @type array $rest_api Optional. The WP REST API configuration. See
 		*       `\Wpx\configure_rest_api` for details.
-		*     @type array $texturization Optional. The WP texturization configuration. See
+		*     @type array|false $self_pinging Optional. The self-pinging configuration. See
+		*       `\Wpx\configure_self_pinging` for details.
+		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `\Wpx\configure_texturization` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
 		*       `\Wpx\configure_wp_cron` for details.
@@ -122,12 +125,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$blog_feed_config = isset( $config['blog_feed'] ) ? $config['blog_feed'] : true;
 			$capital_p_config = isset( $config['capital_p'] ) ? $config['capital_p'] : true;
 			$emojis_config = isset( $config['emojis'] ) ? $config['emojis'] : true;
-			$heartbeat_config = isset( $config['heartbeat'] ) ? $config['heartbeat'] : null;
+			$heartbeat_config = isset( $config['heartbeat'] ) ? $config['heartbeat'] : true;
 			$oembed_provider_support_config = isset( $config['oembed_provider_support'] ) ? $config['oembed_provider_support'] : true;
 			$plugin_and_theme_editors_config = isset( $config['plugin_and_theme_editors'] ) ? $config['plugin_and_theme_editors'] : true;
 			$post_autosave_config = isset( $config['post_autosave'] ) ? $config['post_autosave'] : null;
 			$post_revisions_config = isset( $config['post_revisions'] ) ? $config['post_revisions'] : null;
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
+			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
@@ -153,6 +157,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 			configure_rest_api( $rest_api_config );
 
+			configure_self_pinging( $self_pinging_config );
+
 			configure_texturization( $texturization_config );
 
 			configure_wp_cron( $wp_cron_config );
@@ -172,7 +178,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP "autop"ing configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP "autop"ing.
@@ -201,7 +207,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP blog feed configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP blog feed.
@@ -232,6 +238,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* "Wordpress".
 		*
 		* @since WPX 0.0.0
+		*
+		* @param array|false $config {
+		*     WP capital P configuration.
+		*
+		*     @type bool $disable Flag indicating whether to disable WP capital P functionality.
+		* }
 		*/
 		public static function configure_capital_p ( $config = true ) {
 			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
@@ -258,7 +270,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP emojis configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP emojis.
@@ -285,6 +297,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		/**
 		* Configures the WP heartbeat.
 		*
+		*     configure_heartbeat( false );
+		*
 		*     configure_heartbeat( [ 'disable' => true ] );
 		*
 		*     configure_heartbeat( [ 'interval' => 300 ] );
@@ -296,7 +310,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP heartbeat configuration.
 		*
 		*     @type bool $disable A flag indicating whether to completely disable the WP
@@ -308,28 +322,34 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	suspended.
 		* }
 		*/
-		public static function configure_heartbeat ( $config ) {
-			if ( is_array( $config ) ) {
-				if ( isset( $config['disable'] ) && $config['disable'] === true ) {
-					add_action( 'init', function () {
-						wp_deregister_script( 'heartbeat' );
-					}, 1 );
-				}
-				else {
-					add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
-						if ( isset( $config['interval'] ) ) {
-							$settings['interval'] = $config['interval'];
-						}
-						if ( isset( $config['minimalInterval'] ) ) {
-							$settings['minimalInterval'] = $config['minimalInterval'];
-						}
-						if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
-							$settings['suspension'] = 'disabled';
-						}
+		public static function configure_heartbeat ( $config = true ) {
+			$disable = false;
+			if ( $config === false ) {
+				$disable = true;
+			}
+			elseif ( is_array( $config ) && isset( $config['disable'] ) ) {
+				$disable = $config['disable'];
+			}
 
-						return $settings;
-					} );
-				}
+			if ( $disable ) {
+				add_action( 'init', function () {
+					wp_deregister_script( 'heartbeat' );
+				}, 1 );
+			}
+			elseif ( is_array( $config ) ) {
+				add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
+					if ( isset( $config['interval'] ) ) {
+						$settings['interval'] = $config['interval'];
+					}
+					if ( isset( $config['minimalInterval'] ) ) {
+						$settings['minimalInterval'] = $config['minimalInterval'];
+					}
+					if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
+						$settings['suspension'] = 'disabled';
+					}
+
+					return $settings;
+				} );
 			}
 		}
 
@@ -354,7 +374,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @see https://make.wordpress.org/core/2015/10/28/new-embeds-feature-in-wordpress-4-4/
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP oEmbed provider support configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP oEmbed provider support.
@@ -446,7 +466,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     Plugin and theme editors configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable the plugin and theme
@@ -722,7 +742,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     Self pinging configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable self pinging.
@@ -787,7 +807,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP texturization configuration.
 		*
 		*     @type bool|'completely' $disable Flag indicating whether to disable the WP
@@ -1016,7 +1036,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     XML-RPC configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable XML-RPC.
