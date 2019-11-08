@@ -87,19 +87,19 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @param array $config {
 		*     The WP configuration.
 		*
-		*     @type array $autop Optional. The WP "autop"ing configuration. See
+		*     @type array|false $autop Optional. The WP "autop"ing configuration. See
 		*       `\Wpx\configure_autop` for details.
-		*     @type array $blog_feed Optional. The WP blog feed configuration. See
+		*     @type array|false $blog_feed Optional. The WP blog feed configuration. See
 		*       `\Wpx\configure_blog_feed` for details.
-		*     @type array $capital_p Optional. The WP capital P functionality configuration.
+		*     @type array|false $capital_p Optional. The WP capital P functionality configuration.
 		*       See `\Wpx\configure_capital_p` for details.
-		*     @type array $emojis Optional. The WP emojis configuration. See
+		*     @type array|false $emojis Optional. The WP emojis configuration. See
 		*       `\Wpx\configure_emojis` for details.
 		*     @type array $heartbeat Optional. The WP heartbeat configuration. See
 		*       `\Wpx\configure_heartbeat` for details.
-		*     @type array $oembed_provider_support Optional. The WP oEmbed provider support
+		*     @type array|false $oembed_provider_support Optional. The WP oEmbed provider support
 		*       configuration. See `\Wpx\configure_oembed_provider_support` for details.
-		*     @type array $plugin_and_theme_editors Optional. The plugin and theme editors
+		*     @type array|false $plugin_and_theme_editors Optional. The plugin and theme editors
 		*       configuration. See `\Wpx\configure_plugin_and_theme_editors` for details.
 		*     @type array $post_autosave Optional. The WP post autosave configuration. See
 		*       `\Wpx\configure_post_autosave` for details.
@@ -107,7 +107,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_post_revisions` for details.
 		*     @type array $rest_api Optional. The WP REST API configuration. See
 		*       `\Wpx\configure_rest_api` for details.
-		*     @type array $texturization Optional. The WP texturization configuration. See
+		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `\Wpx\configure_texturization` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
 		*       `\Wpx\configure_wp_cron` for details.
@@ -172,7 +172,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP "autop"ing configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP "autop"ing.
@@ -201,7 +201,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP blog feed configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP blog feed.
@@ -232,6 +232,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* "Wordpress".
 		*
 		* @since WPX 0.0.0
+		*
+		* @param array|false $config {
+		*     WP capital P configuration.
+		*
+		*     @type bool $disable Flag indicating whether to disable WP capital P functionality.
+		* }
 		*/
 		public static function configure_capital_p ( $config = true ) {
 			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
@@ -258,7 +264,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP emojis configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP emojis.
@@ -354,7 +360,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @see https://make.wordpress.org/core/2015/10/28/new-embeds-feature-in-wordpress-4-4/
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP oEmbed provider support configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable WP oEmbed provider support.
@@ -446,7 +452,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     Plugin and theme editors configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable the plugin and theme
@@ -722,7 +728,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     Self pinging configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable self pinging.
@@ -787,7 +793,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP texturization configuration.
 		*
 		*     @type bool|'completely' $disable Flag indicating whether to disable the WP
@@ -1016,7 +1022,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     XML-RPC configuration.
 		*
 		*     @type bool $disable Flag indicating whether to disable XML-RPC.
