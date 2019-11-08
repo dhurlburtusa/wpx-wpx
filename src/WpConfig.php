@@ -137,35 +137,35 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
 			$xmlrpc_config = isset( $config['xmlrpc'] ) ? $config['xmlrpc'] : true;
 
-			configure_autop( $autop_config );
+			self::configure_autop( $autop_config );
 
-			configure_blog_feed( $blog_feed_config );
+			self::configure_blog_feed( $blog_feed_config );
 
-			configure_capital_p( $capital_p_config );
+			self::configure_capital_p( $capital_p_config );
 
-			configure_emojis( $emojis_config );
+			self::configure_emojis( $emojis_config );
 
-			configure_heartbeat( $heartbeat_config );
+			self::configure_heartbeat( $heartbeat_config );
 
-			configure_oembed_provider_support( $oembed_provider_support_config );
+			self::configure_oembed_provider_support( $oembed_provider_support_config );
 
-			configure_plugin_and_theme_editors( $plugin_and_theme_editors_config );
+			self::configure_plugin_and_theme_editors( $plugin_and_theme_editors_config );
 
-			configure_post_autosave( $post_autosave_config );
+			self::configure_post_autosave( $post_autosave_config );
 
-			configure_post_revisions( $post_revisions_config );
+			self::configure_post_revisions( $post_revisions_config );
 
-			configure_rest_api( $rest_api_config );
+			self::configure_rest_api( $rest_api_config );
 
-			configure_self_pinging( $self_pinging_config );
+			self::configure_self_pinging( $self_pinging_config );
 
-			configure_texturization( $texturization_config );
+			self::configure_texturization( $texturization_config );
 
-			configure_wp_cron( $wp_cron_config );
+			self::configure_wp_cron( $wp_cron_config );
 
-			configure_wp_db( $wp_db_config );
+			self::configure_wp_db( $wp_db_config );
 
-			configure_xmlrpc( $xmlrpc_config );
+			self::configure_xmlrpc( $xmlrpc_config );
 		}
 
 		/**
