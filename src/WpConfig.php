@@ -74,6 +74,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'rest_api' => [
 		*     		'must_be_authenticated' => true,
 		*     	],
+		*     	'self_pinging' => false,
 		*     	'texturization' => false,
 		*     	'wp_cron' => [
 		*     		'disable' => true,
@@ -107,6 +108,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_post_revisions` for details.
 		*     @type array $rest_api Optional. The WP REST API configuration. See
 		*       `\Wpx\configure_rest_api` for details.
+		*     @type array|false $self_pinging Optional. The self-pinging configuration. See
+		*       `\Wpx\configure_self_pinging` for details.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `\Wpx\configure_texturization` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
@@ -128,6 +131,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$post_autosave_config = isset( $config['post_autosave'] ) ? $config['post_autosave'] : null;
 			$post_revisions_config = isset( $config['post_revisions'] ) ? $config['post_revisions'] : null;
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
+			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
@@ -152,6 +156,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			configure_post_revisions( $post_revisions_config );
 
 			configure_rest_api( $rest_api_config );
+
+			configure_self_pinging( $self_pinging_config );
 
 			configure_texturization( $texturization_config );
 
