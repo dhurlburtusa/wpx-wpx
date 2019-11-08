@@ -96,7 +96,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       See `\Wpx\configure_capital_p` for details.
 		*     @type array|false $emojis Optional. The WP emojis configuration. See
 		*       `\Wpx\configure_emojis` for details.
-		*     @type array $heartbeat Optional. The WP heartbeat configuration. See
+		*     @type array|false $heartbeat Optional. The WP heartbeat configuration. See
 		*       `\Wpx\configure_heartbeat` for details.
 		*     @type array|false $oembed_provider_support Optional. The WP oEmbed provider support
 		*       configuration. See `\Wpx\configure_oembed_provider_support` for details.
@@ -125,7 +125,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$blog_feed_config = isset( $config['blog_feed'] ) ? $config['blog_feed'] : true;
 			$capital_p_config = isset( $config['capital_p'] ) ? $config['capital_p'] : true;
 			$emojis_config = isset( $config['emojis'] ) ? $config['emojis'] : true;
-			$heartbeat_config = isset( $config['heartbeat'] ) ? $config['heartbeat'] : null;
+			$heartbeat_config = isset( $config['heartbeat'] ) ? $config['heartbeat'] : true;
 			$oembed_provider_support_config = isset( $config['oembed_provider_support'] ) ? $config['oembed_provider_support'] : true;
 			$plugin_and_theme_editors_config = isset( $config['plugin_and_theme_editors'] ) ? $config['plugin_and_theme_editors'] : true;
 			$post_autosave_config = isset( $config['post_autosave'] ) ? $config['post_autosave'] : null;
@@ -297,6 +297,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		/**
 		* Configures the WP heartbeat.
 		*
+		*     configure_heartbeat( false );
+		*
 		*     configure_heartbeat( [ 'disable' => true ] );
 		*
 		*     configure_heartbeat( [ 'interval' => 300 ] );
@@ -308,7 +310,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* @since WPX 0.0.0
 		*
-		* @param array $config {
+		* @param array|false $config {
 		*     WP heartbeat configuration.
 		*
 		*     @type bool $disable A flag indicating whether to completely disable the WP
@@ -320,28 +322,34 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	suspended.
 		* }
 		*/
-		public static function configure_heartbeat ( $config ) {
-			if ( is_array( $config ) ) {
-				if ( isset( $config['disable'] ) && $config['disable'] === true ) {
-					add_action( 'init', function () {
-						wp_deregister_script( 'heartbeat' );
-					}, 1 );
-				}
-				else {
-					add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
-						if ( isset( $config['interval'] ) ) {
-							$settings['interval'] = $config['interval'];
-						}
-						if ( isset( $config['minimalInterval'] ) ) {
-							$settings['minimalInterval'] = $config['minimalInterval'];
-						}
-						if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
-							$settings['suspension'] = 'disabled';
-						}
+		public static function configure_heartbeat ( $config = true ) {
+			$disable = false;
+			if ( $config === false ) {
+				$disable = true;
+			}
+			elseif ( is_array( $config ) && isset( $config['disable'] ) ) {
+				$disable = $config['disable'];
+			}
 
-						return $settings;
-					} );
-				}
+			if ( $disable ) {
+				add_action( 'init', function () {
+					wp_deregister_script( 'heartbeat' );
+				}, 1 );
+			}
+			elseif ( is_array( $config ) ) {
+				add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
+					if ( isset( $config['interval'] ) ) {
+						$settings['interval'] = $config['interval'];
+					}
+					if ( isset( $config['minimalInterval'] ) ) {
+						$settings['minimalInterval'] = $config['minimalInterval'];
+					}
+					if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
+						$settings['suspension'] = 'disabled';
+					}
+
+					return $settings;
+				} );
 			}
 		}
 
