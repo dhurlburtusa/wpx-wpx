@@ -1,8 +1,15 @@
 <?php
+namespace Wpx;
+
 if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
 
 if ( ! defined( 'WPX__VERSION' ) ) {
-	define( 'WPX__VERSION', '0.0.0-alpha7' );
+	define( 'WPX__VERSION', '0.0.0-alpha8' );
+
+	function __404_and_die () {
+		status_header( 404 );
+		die();
+	}
 
 	global $wpx;
 

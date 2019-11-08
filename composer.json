@@ -14,6 +14,11 @@
 			"role": "Developer"
 		}
 	],
+	"autoload": {
+		"psr-4": {
+			"Wpx\\": "src/"
+		}
+	},
 	"support": {
 		"issues": "https://github.com/dhurlburtusa/wpx/issues"
 	},
