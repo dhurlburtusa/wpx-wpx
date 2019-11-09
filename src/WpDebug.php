@@ -1,8 +1,6 @@
 <?php
 namespace Wpx;
 
-if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
-
 require_once __DIR__ . '/__init__.php';
 
 use function \Wpx\__404_and_die;
@@ -46,7 +44,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 
 			if ( $execution_time === true || $peak_memory_use === true ) {
 
-				add_action( 'shutdown', function () use ( $execution_time, $peak_memory_use ) {
+				register_shutdown_function( function () use ( $execution_time, $peak_memory_use ) {
 					global $wpx;
 
 					if ( $execution_time ) {
@@ -69,7 +67,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					}
 
 					error_log( self::$log_separator . " */\n" );
-				}, 9999 );
+				} );
 			} // eo if
 		} // eo function
 

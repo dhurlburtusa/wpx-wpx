@@ -1,8 +1,6 @@
 <?php
 namespace Wpx;
 
-if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
-
 require_once __DIR__ . '/__init__.php';
 
 use function \Wpx\__404_and_die;
