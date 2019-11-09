@@ -76,6 +76,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	],
 		*     	'self_pinging' => false,
 		*     	'texturization' => false,
+		*     	'trash' => 60,
 		*     	'wp_cron' => [
 		*     		'disable' => true,
 		*     	],
@@ -112,6 +113,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_self_pinging` for details.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `\Wpx\configure_texturization` for details.
+		*     @type array $trash Optional. The WP trash configuration. See
+		*       `\Wpx\configure_trash` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
 		*       `\Wpx\configure_wp_cron` for details.
 		*     @type array $wp_db Optional. The WP DB configuration. See
@@ -133,6 +136,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
 			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
+			$trash_config = isset( $config['trash'] ) ? $config['trash'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
 			$xmlrpc_config = isset( $config['xmlrpc'] ) ? $config['xmlrpc'] : true;
@@ -160,6 +164,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			self::configure_self_pinging( $self_pinging_config );
 
 			self::configure_texturization( $texturization_config );
+
+			self::configure_trash( $trash_config );
 
 			self::configure_wp_cron( $wp_cron_config );
 
@@ -827,6 +833,38 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			}
 			elseif ( $disable === 'completely' ) {
 				add_filter( 'run_wptexturize', '__return_false' );
+			}
+		}
+
+		/**
+		* Configures the WP trash.
+		*
+		* Since WordPress 2.9, posts and comments went into the trash instead of being
+		* permanently deleted.
+		*
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the max trash age will
+		* default to the WP default of 30 days.
+		*
+		* @param array|false $config {
+		*     WP trash configuration.
+		*
+		*     @type int $max_age The number of days to keep trashed posts and comments around
+		*       before they are automatically deleted.
+		* }
+		*/
+		public static function configure_trash ( $config ) {
+			if ( is_array( $config ) ) {
+				$max_age = isset( $config['max_age'] ) ? $config['max_age'] : null;
+
+				if ( is_numeric( $max_age ) ) {
+					if ( defined( 'EMPTY_TRASH_DAYS' ) ) {
+						trigger_error( __( '`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+					}
+					else {
+						define( 'EMPTY_TRASH_DAYS', $max_age );
+					}
+				}
 			}
 		}
 
