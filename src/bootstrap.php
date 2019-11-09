@@ -5,6 +5,9 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 	define( 'WPX__VERSION', '0.0.0-alpha10' );
 
 	function __404_and_die () {
+		// Implementation Note: Not using WP's `status_header` function here so that this
+		// file may be included in `wp-config.php`. That is, `status_header` won't exist
+		// when `wp-config.php` is included.
 		$protocol = $_SERVER['SERVER_PROTOCOL'];
 		if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
 			$protocol = 'HTTP/1.0';
