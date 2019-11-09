@@ -46,14 +46,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					global $timestart, $wpx;
 
 					if ( $execution_time ) {
-						$starttime = $wpx['state']['request']['start'];
+						$starttime = $wpx['state']['request']['timing']['start'];
 						if ( is_numeric( $timestart ) && $timestart < $starttime ) {
 							$starttime = $timestart;
 						}
-						$endtime = $wpx['state']['request']['end'];
+						$endtime = $wpx['state']['request']['timing']['end'];
 
 						if ( ! is_numeric( $endtime ) ) {
-							$endtime = $wpx['state']['request']['end'] = microtime( true );
+							$endtime = $wpx['state']['request']['timing']['end'] = microtime( true );
 						}
 
 						$duration_us = number_format( 1000000 * ($endtime - $starttime) );

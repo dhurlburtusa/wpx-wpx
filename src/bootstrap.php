@@ -39,8 +39,10 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 		'state' => array(
 			'locale' => null,
 			'request' => array(
-				'start' => microtime( true ),
-				'end' => null,
+				'timing' => array(
+					'start' => microtime( true ),
+					'end' => null,
+				),
 			),
 		),
 	);
