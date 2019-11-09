@@ -34,10 +34,10 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 		// 	'locale'?
 		// ),
 		'state' => array(
-			'locale' => NULL,
+			'locale' => null,
 			'request' => array(
-				'start' => microtime( TRUE ),
-				'end' => NULL,
+				'start' => microtime( true ),
+				'end' => null,
 			),
 		),
 	);
