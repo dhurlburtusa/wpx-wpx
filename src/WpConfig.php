@@ -509,6 +509,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'interval' => 0, // This is just temporary.
 		*     ) );
 		*
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
+		* default to the WP default of 60 seconds.
+		*
 		* @since WPX 0.0.0
 		*
 		* @see configure_post_revisions
@@ -870,6 +874,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     wget -q -O - https://yourdomain.com/wp-cron.php?doing_wp_cron >/dev/null 2>&1
 		*
 		* Of course updating the command with your own domain.
+		*
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
+		* default to the WP default of 60 seconds.
 		*
 		* Note: Both `WP_DEBUG` and `WP_DEBUG_LOG` must be defined as true when
 		* `$config['log_execution']` is true in order for the log entry to show in
