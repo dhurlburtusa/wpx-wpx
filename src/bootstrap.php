@@ -13,6 +13,20 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 		die();
 	}
 
+	/*
+	 * Determines whether the specified string ends with a specified string.
+	 *
+	 * Unfortunately, PHP doesn't come with an equivalent function.
+	 *
+	 * @param string $haystack The string to be examined.
+	 * @param string $needle The string to look for at the end of the haystack.
+	 *
+	 * @return bool true if the haystack ends with the needle, false otherwise.
+	 */
+	function __ends_with ( $haystack, $needle ) {
+		return substr_compare( $haystack, $needle, -strlen( $needle )) === 0;
+	}
+
 	global $wpx;
 
 	$wpx = array(
