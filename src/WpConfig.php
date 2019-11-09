@@ -83,6 +83,16 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'wp_db' => [
 		*     		'log_queries' => true,
 		*     	],
+		*     	'wp_http' => [
+		*     		'access' => [
+		*     			'external' => false,
+		*     			'allow' => [
+		*     				'api.wordpress.org',
+		*     				'example.com',
+		*     				// etc
+		*     			],
+		*     		],
+		*     	],
 		*     	'xmlrpc' => false,
 		*     ]);
 		*
@@ -119,6 +129,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_wp_cron` for details.
 		*     @type array $wp_db Optional. The WP DB configuration. See
 		*       `\Wpx\configure_wp_db` for details.
+		*     @type array $wp_http Optional. The WP HTTP configuration. See
+		*       `\Wpx\configure_wp_http` for details.
 		*     @type array $xmlrpc Optional. The XML-RPC configuration. See
 		*       `\Wpx\configure_xmlrpc` for details.
 		* }
@@ -139,6 +151,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$trash_config = isset( $config['trash'] ) ? $config['trash'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
+			$wp_http_config = isset( $config['wp_http'] ) ? $config['wp_http'] : null;
 			$xmlrpc_config = isset( $config['xmlrpc'] ) ? $config['xmlrpc'] : true;
 
 			self::configure_autop( $autop_config );
@@ -170,6 +183,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			self::configure_wp_cron( $wp_cron_config );
 
 			self::configure_wp_db( $wp_db_config );
+
+			self::configure_wp_http( $wp_http_config );
 
 			self::configure_xmlrpc( $xmlrpc_config );
 		}
@@ -1029,6 +1044,72 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 							global $wpdb;
 							error_log( print_r( $wpdb->queries, true ) );
 						} );
+					}
+				}
+			}
+		}
+
+		/**
+		* Configures the WP HTTP API.
+		*
+		*     configure_wp_http( [
+		*     	'access' => [
+		*     		'external' => false,
+		*     		'allow' => [
+		*     			'api.wordpress.org',
+		*     			'example.com',
+		*     			// etc.
+		*     		],
+		*     	],
+		*     ] );
+		*
+		* @param array $config {
+		*     WP HTTP configuration.
+		*
+		*     @type array $access {
+		*         Access configuration.
+		*
+		*         @type bool $external Optional. Flag indicating whether to allow external access.
+		*           Defaults to true.
+		*         @type bool $local Optional. Flag indicating whether to allow local access.
+		*           Defaults to true.
+		*         @type array $allow Optional. List of hostnames to allow access. Only applicable
+		*           when `$external` is false. It is recommended to include `'api.wordpress.org'`
+		*           otherwise updates and downloading plugins or themes won't work.
+		*     }
+		* }
+		*/
+		public static function configure_wp_http ( $config ) {
+			if ( is_array( $config ) ) {
+				$access = isset( $config['access'] ) ? $config['access'] : null;
+				if ( is_array( $access ) ) {
+					$external = isset( $access['external'] ) ? $access['external'] : true;
+					if ( $external === false ) {
+						if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) ) {
+							if ( ! WP_HTTP_BLOCK_EXTERNAL ) {
+								trigger_error( __( '`WP_HTTP_BLOCK_EXTERNAL` has already been defined and set to falsey prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+							}
+						}
+						else {
+							define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+						}
+					}
+					$local = isset( $access['local'] ) ? $access['local'] : true;
+					if ( $local === false ) {
+						add_filter( 'block_local_requests', '__return_true' );
+					}
+					$allow = isset( $access['allow'] ) ? $access['allow'] : '';
+					if ( ! empty( $allow ) ) {
+						$accessible_hosts = $allow;
+						if ( is_array( $accessible_hosts ) ) {
+							$accessible_hosts = implode( ',', $accessible_hosts );
+						}
+						if ( defined( 'WP_ACCESSIBLE_HOSTS' ) ) {
+							trigger_error( __( '`WP_ACCESSIBLE_HOSTS` has already been defined prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+						}
+						else {
+							define( 'WP_ACCESSIBLE_HOSTS', $accessible_hosts );
+						}
 					}
 				}
 			}
