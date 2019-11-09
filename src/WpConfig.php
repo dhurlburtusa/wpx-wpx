@@ -1,7 +1,7 @@
 <?php
 namespace Wpx;
 
-require_once __DIR__ . '/__init__.php';
+require_once __DIR__ . '/bootstrap.php';
 
 use function \Wpx\__404_and_die;
 
