@@ -176,8 +176,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* This can be used to prevent WordPress from "autop"ing your site's content.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     WP "autop"ing configuration.
 		*
@@ -204,8 +202,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP blog feed configuration.
@@ -237,8 +233,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* May be used to prevents WordPress from capitalizing the `p` in the word
 		* "Wordpress".
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     WP capital P configuration.
 		*
@@ -267,8 +261,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP emojis configuration.
@@ -307,8 +299,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'allow_suspension' => true,
 		*     	'interval' => 60,
 		*     ] );
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP heartbeat configuration.
@@ -369,8 +359,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @see https://make.wordpress.org/core/2015/10/28/new-embeds-feature-in-wordpress-4-4/
 		*
@@ -464,8 +452,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Allows preventing access to the plugin and theme editors in the WP admin.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     Plugin and theme editors configuration.
 		*
@@ -512,8 +498,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
 		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
 		* default to the WP default of 60 seconds.
-		*
-		* @since WPX 0.0.0
 		*
 		* @see configure_post_revisions
 		* @see https://www.wpbeginner.com/glossary/autosave/
@@ -577,8 +561,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* - "WP Revisions Control" by Erick Hitter
 		* 	+ Allow to disable or limit by post type.
 		* 	+ Allow to disable or limit per post.
-		*
-		* @since WPX 0.0.0
 		*
 		* @see https://www.wpbeginner.com/glossary/revisions/
 		*
@@ -646,8 +628,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* reuses the same error code (i.e., `rest_not_logged_in`) as the core WP REST API.
 		*
 		* Note: Since WordPress version 4.7.0, the REST API cannot be completely disabled.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array $config {
 		*     Post revisions configuration.
@@ -744,8 +724,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Allows disabling the ability of the site from pinging itself.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     Self pinging configuration.
 		*
@@ -808,8 +786,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Alternative: Use the [wpuntexturize](https://wordpress.org/plugins/wpuntexturize/)
 		* plugin.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP texturization configuration.
@@ -882,8 +858,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Note: Both `WP_DEBUG` and `WP_DEBUG_LOG` must be defined as true when
 		* `$config['log_execution']` is true in order for the log entry to show in
 		* `wp-content/debug.log`.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array $config {
 		*     WP-Cron configuration.
@@ -990,8 +964,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* `$config['log_queries']` is true in order for the log entry to show in
 		* `wp-content/debug.log`.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array $config {
 		*     WP-DB configuration.
 		*
@@ -1041,8 +1013,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Ideally, this will be called as early in the request as possible such as in a
 		* must-use (MU) plugin.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     XML-RPC configuration.
