@@ -34,8 +34,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 	}
 
 	function _wp_cron_with_exec_time () {
+		global $timestart; // A WP global.
+
 		if ( ! defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
-			$starttime = microtime( true );
+			$starttime = is_numeric( $timestart ) ? $timestart : microtime( true );
 			wp_cron();
 			$endtime = microtime( true );
 			$duration_us = 1000000 * ($endtime - $starttime);

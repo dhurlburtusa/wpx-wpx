@@ -45,10 +45,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 			if ( $execution_time === true || $peak_memory_use === true ) {
 
 				register_shutdown_function( function () use ( $execution_time, $peak_memory_use ) {
-					global $wpx;
+					global $timestart, $wpx;
 
 					if ( $execution_time ) {
 						$starttime = $wpx['state']['request']['start'];
+						if ( is_numeric( $timestart ) && $timestart < $starttime ) {
+							$starttime = $timestart;
+						}
 						$endtime = $wpx['state']['request']['end'];
 
 						if ( ! is_numeric( $endtime ) ) {
