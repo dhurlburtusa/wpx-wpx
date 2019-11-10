@@ -1,9 +1,7 @@
 <?php
 namespace Wpx;
 
-if ( ! defined( 'ABSPATH' ) ) { status_header(404); die(); }
-
-require_once __DIR__ . '/__init__.php';
+require_once __DIR__ . '/bootstrap.php';
 
 use function \Wpx\__404_and_die;
 
@@ -36,8 +34,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 	}
 
 	function _wp_cron_with_exec_time () {
+		global $timestart; // A WP global.
+
 		if ( ! defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
-			$starttime = microtime( true );
+			$starttime = is_numeric( $timestart ) ? $timestart : microtime( true );
 			wp_cron();
 			$endtime = microtime( true );
 			$duration_us = 1000000 * ($endtime - $starttime);
@@ -76,11 +76,22 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	],
 		*     	'self_pinging' => false,
 		*     	'texturization' => false,
+		*     	'trash' => 60,
 		*     	'wp_cron' => [
 		*     		'disable' => true,
 		*     	],
 		*     	'wp_db' => [
 		*     		'log_queries' => true,
+		*     	],
+		*     	'wp_http' => [
+		*     		'access' => [
+		*     			'external' => false,
+		*     			'allow' => [
+		*     				'api.wordpress.org',
+		*     				'example.com',
+		*     				// etc
+		*     			],
+		*     		],
 		*     	],
 		*     	'xmlrpc' => false,
 		*     ]);
@@ -112,10 +123,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `\Wpx\configure_self_pinging` for details.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `\Wpx\configure_texturization` for details.
+		*     @type array $trash Optional. The WP trash configuration. See
+		*       `\Wpx\configure_trash` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
 		*       `\Wpx\configure_wp_cron` for details.
 		*     @type array $wp_db Optional. The WP DB configuration. See
 		*       `\Wpx\configure_wp_db` for details.
+		*     @type array $wp_http Optional. The WP HTTP configuration. See
+		*       `\Wpx\configure_wp_http` for details.
 		*     @type array $xmlrpc Optional. The XML-RPC configuration. See
 		*       `\Wpx\configure_xmlrpc` for details.
 		* }
@@ -133,8 +148,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
 			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
+			$trash_config = isset( $config['trash'] ) ? $config['trash'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
 			$wp_db_config = isset( $config['wp_db'] ) ? $config['wp_db'] : null;
+			$wp_http_config = isset( $config['wp_http'] ) ? $config['wp_http'] : null;
 			$xmlrpc_config = isset( $config['xmlrpc'] ) ? $config['xmlrpc'] : true;
 
 			self::configure_autop( $autop_config );
@@ -161,9 +178,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 			self::configure_texturization( $texturization_config );
 
+			self::configure_trash( $trash_config );
+
 			self::configure_wp_cron( $wp_cron_config );
 
 			self::configure_wp_db( $wp_db_config );
+
+			self::configure_wp_http( $wp_http_config );
 
 			self::configure_xmlrpc( $xmlrpc_config );
 		}
@@ -175,8 +196,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* certain content.
 		*
 		* This can be used to prevent WordPress from "autop"ing your site's content.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP "autop"ing configuration.
@@ -204,8 +223,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP blog feed configuration.
@@ -237,8 +254,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* May be used to prevents WordPress from capitalizing the `p` in the word
 		* "Wordpress".
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     WP capital P configuration.
 		*
@@ -267,8 +282,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP emojis configuration.
@@ -307,8 +320,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'allow_suspension' => true,
 		*     	'interval' => 60,
 		*     ] );
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     WP heartbeat configuration.
@@ -369,8 +380,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
-		*
-		* @since WPX 0.0.0
 		*
 		* @see https://make.wordpress.org/core/2015/10/28/new-embeds-feature-in-wordpress-4-4/
 		*
@@ -464,8 +473,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Allows preventing access to the plugin and theme editors in the WP admin.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     Plugin and theme editors configuration.
 		*
@@ -509,7 +516,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	'interval' => 0, // This is just temporary.
 		*     ) );
 		*
-		* @since WPX 0.0.0
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
+		* default to the WP default of 60 seconds.
 		*
 		* @see configure_post_revisions
 		* @see https://www.wpbeginner.com/glossary/autosave/
@@ -573,8 +582,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* - "WP Revisions Control" by Erick Hitter
 		* 	+ Allow to disable or limit by post type.
 		* 	+ Allow to disable or limit per post.
-		*
-		* @since WPX 0.0.0
 		*
 		* @see https://www.wpbeginner.com/glossary/revisions/
 		*
@@ -642,8 +649,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* reuses the same error code (i.e., `rest_not_logged_in`) as the core WP REST API.
 		*
 		* Note: Since WordPress version 4.7.0, the REST API cannot be completely disabled.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array $config {
 		*     Post revisions configuration.
@@ -740,8 +745,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Allows disabling the ability of the site from pinging itself.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     Self pinging configuration.
 		*
@@ -805,8 +808,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Alternative: Use the [wpuntexturize](https://wordpress.org/plugins/wpuntexturize/)
 		* plugin.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array|false $config {
 		*     WP texturization configuration.
 		*
@@ -851,6 +852,38 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		}
 
 		/**
+		* Configures the WP trash.
+		*
+		* Since WordPress 2.9, posts and comments went into the trash instead of being
+		* permanently deleted.
+		*
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the max trash age will
+		* default to the WP default of 30 days.
+		*
+		* @param array|false $config {
+		*     WP trash configuration.
+		*
+		*     @type int $max_age The number of days to keep trashed posts and comments around
+		*       before they are automatically deleted.
+		* }
+		*/
+		public static function configure_trash ( $config ) {
+			if ( is_array( $config ) ) {
+				$max_age = isset( $config['max_age'] ) ? $config['max_age'] : null;
+
+				if ( is_numeric( $max_age ) ) {
+					if ( defined( 'EMPTY_TRASH_DAYS' ) ) {
+						trigger_error( __( '`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+					}
+					else {
+						define( 'EMPTY_TRASH_DAYS', $max_age );
+					}
+				}
+			}
+		}
+
+		/**
 		* Configures WP-Cron.
 		*
 		* By default, WordPress will automatically process all pending WP-Cron tasks
@@ -871,11 +904,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Of course updating the command with your own domain.
 		*
+		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
+		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
+		* default to the WP default of 60 seconds.
+		*
 		* Note: Both `WP_DEBUG` and `WP_DEBUG_LOG` must be defined as true when
 		* `$config['log_execution']` is true in order for the log entry to show in
 		* `wp-content/debug.log`.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array $config {
 		*     WP-Cron configuration.
@@ -982,8 +1017,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* `$config['log_queries']` is true in order for the log entry to show in
 		* `wp-content/debug.log`.
 		*
-		* @since WPX 0.0.0
-		*
 		* @param array $config {
 		*     WP-DB configuration.
 		*
@@ -1017,6 +1050,72 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		}
 
 		/**
+		* Configures the WP HTTP API.
+		*
+		*     configure_wp_http( [
+		*     	'access' => [
+		*     		'external' => false,
+		*     		'allow' => [
+		*     			'api.wordpress.org',
+		*     			'example.com',
+		*     			// etc.
+		*     		],
+		*     	],
+		*     ] );
+		*
+		* @param array $config {
+		*     WP HTTP configuration.
+		*
+		*     @type array $access {
+		*         Access configuration.
+		*
+		*         @type bool $external Optional. Flag indicating whether to allow external access.
+		*           Defaults to true.
+		*         @type bool $local Optional. Flag indicating whether to allow local access.
+		*           Defaults to true.
+		*         @type array $allow Optional. List of hostnames to allow access. Only applicable
+		*           when `$external` is false. It is recommended to include `'api.wordpress.org'`
+		*           otherwise updates and downloading plugins or themes won't work.
+		*     }
+		* }
+		*/
+		public static function configure_wp_http ( $config ) {
+			if ( is_array( $config ) ) {
+				$access = isset( $config['access'] ) ? $config['access'] : null;
+				if ( is_array( $access ) ) {
+					$external = isset( $access['external'] ) ? $access['external'] : true;
+					if ( $external === false ) {
+						if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) ) {
+							if ( ! WP_HTTP_BLOCK_EXTERNAL ) {
+								trigger_error( __( '`WP_HTTP_BLOCK_EXTERNAL` has already been defined and set to falsey prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+							}
+						}
+						else {
+							define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+						}
+					}
+					$local = isset( $access['local'] ) ? $access['local'] : true;
+					if ( $local === false ) {
+						add_filter( 'block_local_requests', '__return_true' );
+					}
+					$allow = isset( $access['allow'] ) ? $access['allow'] : '';
+					if ( ! empty( $allow ) ) {
+						$accessible_hosts = $allow;
+						if ( is_array( $accessible_hosts ) ) {
+							$accessible_hosts = implode( ',', $accessible_hosts );
+						}
+						if ( defined( 'WP_ACCESSIBLE_HOSTS' ) ) {
+							trigger_error( __( '`WP_ACCESSIBLE_HOSTS` has already been defined prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+						}
+						else {
+							define( 'WP_ACCESSIBLE_HOSTS', $accessible_hosts );
+						}
+					}
+				}
+			}
+		}
+
+		/**
 		* Configures XML-RPC.
 		*
 		* Allows to disable the ability to publish the blog remotely.
@@ -1033,8 +1132,6 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Ideally, this will be called as early in the request as possible such as in a
 		* must-use (MU) plugin.
-		*
-		* @since WPX 0.0.0
 		*
 		* @param array|false $config {
 		*     XML-RPC configuration.
