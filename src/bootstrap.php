@@ -38,11 +38,34 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 		// ),
 		'state' => array(
 			'locale' => null,
-			'request' => array(
-				'timing' => array(
-					'start' => microtime( true ),
-					'end' => null,
+			'mu_plugins' => array(
+				'snapshots' => array(
+					// Each item will be like the following.
+					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
 				),
+			),
+			'network_plugins' => array(
+				'snapshots' => array(
+					// Each item will be like the following.
+					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
+				),
+			),
+			'plugins' => array(
+				'snapshots' => array(
+					// Each item will be like the following.
+					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
+				),
+			),
+			'theme' => array(
+				// 'starttime' => float,
+				// 'endtime' => float,
+				// '_pre_mem_usage' => int,
+				// '_post_mem_usage' => int,
+			),
+			'request' => array(
+				// '_pre_mem_usage' => int,
+				'starttime' => microtime( true ),
+				'endtime' => null,
 			),
 		),
 	);
