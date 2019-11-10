@@ -380,7 +380,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 							$endtime = $plugins_snapshots[$plugins_snapshot_count - 1]['endtime'];
 							$duration_us = number_format( 1000000 * ($endtime - $plugins_starttime) );
 
-							error_log( "Loading {$plugins_snapshot_count} network plugins took about {$duration_us} μs." );
+							error_log( "Loading {$plugins_snapshot_count} regular plugins took about {$duration_us} μs." );
 						}
 					}
 
@@ -389,7 +389,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						if ( $plugins_snapshot_count > 1 ) {
 							$memory_delta = $plugins_snapshots[$plugins_snapshot_count - 1]['_mem_usage'] - $plugins_pre_mem_usage;
 
-							error_log( "Loading {$plugins_snapshot_count} network plugins changed memory use by " . number_format( $memory_delta ) . ' bytes.' );
+							error_log( "Loading {$plugins_snapshot_count} regular plugins changed memory use by " . number_format( $memory_delta ) . ' bytes.' );
 						}
 					}
 
