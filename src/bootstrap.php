@@ -2,7 +2,7 @@
 namespace Wpx;
 
 if ( ! defined( 'WPX__VERSION' ) ) {
-	define( 'WPX__VERSION', '0.0.0-alpha10' );
+	define( 'WPX__VERSION', '0.0.0-alpha11' );
 
 	function __404_and_die () {
 		// Implementation Note: Not using WP's `status_header` function here so that this
