@@ -13,6 +13,52 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 	class WpDebug {
 		private static $log_separator = '================================================================================';
 
+		private static function __ensure_state () {
+			global $wpx;
+
+			if ( ! is_array( $wpx ) ) {
+				$wpx = array();
+			}
+
+			if ( ! isset( $wpx['state'] ) ) {
+				$wpx['state'] = array();
+			}
+
+			if ( ! isset( $wpx['state']['debug'] ) ) {
+				$wpx['state']['debug'] = array(
+					'mu_plugins' => array(
+						'snapshots' => array(
+							// Each item will be like the following.
+							// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
+						),
+					),
+					'network_plugins' => array(
+						'snapshots' => array(
+							// Each item will be like the following.
+							// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
+						),
+					),
+					'plugins' => array(
+						'snapshots' => array(
+							// Each item will be like the following.
+							// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
+						),
+					),
+					'theme' => array(
+						// 'starttime' => float,
+						// 'endtime' => float,
+						// '_pre_mem_usage' => int,
+						// '_post_mem_usage' => int,
+					),
+					'request' => array(
+						// '_pre_mem_usage' => int,
+						'starttime' => microtime( true ),
+						'endtime' => null,
+					),
+				);
+			}
+		}
+
 		/**
 		* Logs information about the request.
 		*
@@ -92,8 +138,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 			// Note: The following is not done when `theme_mem_delta` is true because the `setup_theme`
 			// action allows us to accurately set the pre-memory usage for the theme.
 			if ( $mu_plugins_mem_delta === true || $network_plugins_mem_delta === true || $plugins_mem_delta === true ) {
-				if ( ! isset( $wpx['state']['request']['_pre_mem_usage'] ) ) {
-					$wpx['state']['request']['_pre_mem_usage'] = memory_get_usage();
+				if ( ! isset( $wpx['state']['debug']['request']['_pre_mem_usage'] ) ) {
+					$wpx['state']['debug']['request']['_pre_mem_usage'] = memory_get_usage();
 				}
 			}
 
@@ -116,7 +162,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 							$snapshot['_mem_usage'] = memory_get_usage();
 						}
 
-						$wpx['state']['mu_plugins']['snapshots'][] = $snapshot;
+						$wpx['state']['debug']['mu_plugins']['snapshots'][] = $snapshot;
 					}, 1 );
 				}
 
@@ -136,7 +182,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 							$snapshot['_mem_usage'] = memory_get_usage();
 						}
 
-						$wpx['state']['network_plugins']['snapshots'][] = $snapshot;
+						$wpx['state']['debug']['network_plugins']['snapshots'][] = $snapshot;
 					}, 1 );
 				}
 
@@ -156,7 +202,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 							$snapshot['_mem_usage'] = memory_get_usage();
 						}
 
-						$wpx['state']['plugins']['snapshots'][] = $snapshot;
+						$wpx['state']['debug']['plugins']['snapshots'][] = $snapshot;
 					}, 1 );
 				}
 
@@ -165,11 +211,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						global $wpx;
 
 						if ( $theme_load_time ) {
-							$wpx['state']['theme']['starttime'] = microtime( true );
+							$wpx['state']['debug']['theme']['starttime'] = microtime( true );
 						}
 
 						if ( $theme_mem_delta ) {
-							$wpx['state']['theme']['_pre_mem_usage'] = memory_get_usage();
+							$wpx['state']['debug']['theme']['_pre_mem_usage'] = memory_get_usage();
 						}
 					}, 9999 );
 
@@ -177,10 +223,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						global $wpx;
 
 						if ( $theme_load_time ) {
-							$wpx['state']['theme']['endtime'] = microtime( true );
+							$wpx['state']['debug']['theme']['endtime'] = microtime( true );
 						}
 						if ( $theme_mem_delta ) {
-							$wpx['state']['theme']['_post_mem_usage'] = memory_get_usage();
+							$wpx['state']['debug']['theme']['_post_mem_usage'] = memory_get_usage();
 						}
 					}, 9999 );
 				}
@@ -205,8 +251,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					// Note: `$timestart` is a global added by WP.
 					global $timestart, $wpx;
 
-					$req_starttime = $wpx['state']['request']['starttime'];
-					$req_pre_mem_usage = $wpx['state']['request']['_pre_mem_usage'];
+					$req_starttime = $wpx['state']['debug']['request']['starttime'];
+					$req_pre_mem_usage = $wpx['state']['debug']['request']['_pre_mem_usage'];
 					if ( is_numeric( $timestart ) && $timestart < $req_starttime ) {
 						$req_starttime = $timestart;
 					}
@@ -214,13 +260,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					// There are no (or no reliable) hooks to use to get a snapshot of the time just
 					// before the must-use plugins begin loading. So, we fallback to the most recent
 					// the start of the request according to WPX or according to WP.
-					$mu_plugins_starttime = isset( $wpx['state']['mu_plugins']['starttime'] ) ? $wpx['state']['mu_plugins']['starttime'] : $req_starttime;
+					$mu_plugins_starttime = isset( $wpx['state']['debug']['mu_plugins']['starttime'] ) ? $wpx['state']['debug']['mu_plugins']['starttime'] : $req_starttime;
 					if ( is_numeric( $timestart ) && $timestart > $mu_plugins_starttime ) {
 						$mu_plugins_starttime = $timestart;
 					}
 					$mu_plugins_pre_mem_usage = $req_pre_mem_usage;
 
-					$mu_plugins_snapshots = $wpx['state']['mu_plugins']['snapshots'];
+					$mu_plugins_snapshots = $wpx['state']['debug']['mu_plugins']['snapshots'];
 					$mu_plugins_snapshot_count = count( $mu_plugins_snapshots );
 
 					if ( $mu_plugins_load_time || $mu_plugins_mem_delta ) {
@@ -265,12 +311,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						}
 					}
 
-					$network_plugins_starttime = isset( $wpx['state']['network_plugins']['starttime'] ) ? $wpx['state']['network_plugins']['starttime'] : $req_starttime;
+					$network_plugins_starttime = isset( $wpx['state']['debug']['network_plugins']['starttime'] ) ? $wpx['state']['debug']['network_plugins']['starttime'] : $req_starttime;
 					if ( is_numeric( $timestart ) && $timestart > $network_plugins_starttime ) {
 						$network_plugins_starttime = $timestart;
 					}
 					if ( $mu_plugins_snapshot_count > 0 ) {
-						$last_mu_plugin_endtime = $wpx['state']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['endtime'];
+						$last_mu_plugin_endtime = $wpx['state']['debug']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['endtime'];
 						if ( $last_mu_plugin_endtime > $network_plugins_starttime ) {
 							$network_plugins_starttime = $last_mu_plugin_endtime;
 						}
@@ -278,10 +324,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 
 					$network_plugins_pre_mem_usage = $mu_plugins_pre_mem_usage;
 					if ( $mu_plugins_snapshot_count > 0 ) {
-						$network_plugins_pre_mem_usage = $wpx['state']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['_mem_usage'];
+						$network_plugins_pre_mem_usage = $wpx['state']['debug']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['_mem_usage'];
 					}
 
-					$network_plugins_snapshots = $wpx['state']['network_plugins']['snapshots'];
+					$network_plugins_snapshots = $wpx['state']['debug']['network_plugins']['snapshots'];
 					$network_plugins_snapshot_count = count( $network_plugins_snapshots );
 
 					if ( $network_plugins_load_time || $network_plugins_mem_delta ) {
@@ -326,18 +372,18 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						}
 					}
 
-					$plugins_starttime = isset( $wpx['state']['plugins']['starttime'] ) ? $wpx['state']['plugins']['starttime'] : $req_starttime;
+					$plugins_starttime = isset( $wpx['state']['debug']['plugins']['starttime'] ) ? $wpx['state']['debug']['plugins']['starttime'] : $req_starttime;
 					if ( is_numeric( $timestart ) && $timestart > $plugins_starttime ) {
 						$plugins_starttime = $timestart;
 					}
 					if ( $mu_plugins_snapshot_count > 0 ) {
-						$last_mu_plugin_endtime = $wpx['state']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['endtime'];
+						$last_mu_plugin_endtime = $wpx['state']['debug']['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['endtime'];
 						if ( $last_mu_plugin_endtime > $plugins_starttime ) {
 							$plugins_starttime = $last_mu_plugin_endtime;
 						}
 					}
 					if ( $network_plugins_snapshot_count > 0 ) {
-						$last_network_plugin_endtime = $wpx['state']['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['endtime'];
+						$last_network_plugin_endtime = $wpx['state']['debug']['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['endtime'];
 						if ( $last_network_plugin_endtime > $plugins_starttime ) {
 							$plugins_starttime = $last_network_plugin_endtime;
 						}
@@ -345,10 +391,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 
 					$plugins_pre_mem_usage = $network_plugins_pre_mem_usage;
 					if ( $network_plugins_snapshot_count > 0 ) {
-						$plugins_pre_mem_usage = $wpx['state']['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['_mem_usage'];
+						$plugins_pre_mem_usage = $wpx['state']['debug']['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['_mem_usage'];
 					}
 
-					$plugins_snapshots = $wpx['state']['plugins']['snapshots'];
+					$plugins_snapshots = $wpx['state']['debug']['plugins']['snapshots'];
 					$plugins_snapshot_count = count( $plugins_snapshots );
 
 					if ( $plugins_load_time || $plugins_mem_delta ) {
@@ -394,20 +440,20 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					}
 
 					if ( $theme_load_time ) {
-						$load_time_us = 1000000 * ( $wpx['state']['theme']['endtime'] - $wpx['state']['theme']['starttime'] );
+						$load_time_us = 1000000 * ( $wpx['state']['debug']['theme']['endtime'] - $wpx['state']['debug']['theme']['starttime'] );
 
 						error_log( "Loading current theme took about " . number_format( $load_time_us ) . ' μs.' );
 					}
 
 					if ( $theme_mem_delta ) {
-						$memory_delta = $wpx['state']['theme']['_post_mem_usage'] - $wpx['state']['theme']['_pre_mem_usage'];
+						$memory_delta = $wpx['state']['debug']['theme']['_post_mem_usage'] - $wpx['state']['debug']['theme']['_pre_mem_usage'];
 						error_log( "Loading current theme changed memory use by " . number_format( $memory_delta ) . ' bytes.' );
 					}
 
 					if ( $req_exec_time ) {
-						$endtime = $wpx['state']['request']['endtime'];
+						$endtime = $wpx['state']['debug']['request']['endtime'];
 						if ( ! is_numeric( $endtime ) ) {
-							$endtime = $wpx['state']['request']['endtime'] = microtime( true );
+							$endtime = $wpx['state']['debug']['request']['endtime'] = microtime( true );
 						}
 
 						$duration_us = number_format( 1000000 * ($endtime - $req_starttime) );
