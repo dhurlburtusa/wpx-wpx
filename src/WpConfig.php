@@ -300,7 +300,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 				remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 
-				add_filter( 'tiny_mce_plugins', '__remove_tiny_mce_emojis_plugin' );
+				add_filter( 'tiny_mce_plugins', __NAMESPACE__ . '\__remove_tiny_mce_emojis_plugin' );
 				add_filter( 'emoji_svg_url', '__return_empty_string' );
 			}
 		}
