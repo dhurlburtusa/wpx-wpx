@@ -1,8 +1,8 @@
 <?php
-namespace Wpx;
+namespace Wpx\v0;
 
-if ( ! defined( 'WPX__VERSION' ) ) {
-	define( 'WPX__VERSION', '0.0.0-alpha11' );
+if ( ! defined( 'WPX_WPX_0__VERSION' ) ) {
+	define( 'WPX_WPX_0__VERSION', '0.0.0-alpha.12' );
 
 	function __404_and_die () {
 		// Implementation Note: Not using WP's `status_header` function here so that this
@@ -30,43 +30,4 @@ if ( ! defined( 'WPX__VERSION' ) ) {
 		return substr_compare( $haystack, $needle, -strlen( $needle )) === 0;
 	}
 
-	global $wpx;
-
-	$wpx = array(
-		// IDEA: 'cache' = array(
-		// 	'locale'?
-		// ),
-		'state' => array(
-			'locale' => null,
-			'mu_plugins' => array(
-				'snapshots' => array(
-					// Each item will be like the following.
-					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
-				),
-			),
-			'network_plugins' => array(
-				'snapshots' => array(
-					// Each item will be like the following.
-					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
-				),
-			),
-			'plugins' => array(
-				'snapshots' => array(
-					// Each item will be like the following.
-					// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
-				),
-			),
-			'theme' => array(
-				// 'starttime' => float,
-				// 'endtime' => float,
-				// '_pre_mem_usage' => int,
-				// '_post_mem_usage' => int,
-			),
-			'request' => array(
-				// '_pre_mem_usage' => int,
-				'starttime' => microtime( true ),
-				'endtime' => null,
-			),
-		),
-	);
 }

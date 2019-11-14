@@ -1,9 +1,9 @@
 <?php
-namespace Wpx;
+namespace Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
-use function \Wpx\__404_and_die;
+use function Wpx\v0\__404_and_die;
 
 if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
@@ -52,9 +52,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* **Example Usage**
 		*
-		*     use function \Wpx\configure;
-		*
-		*     configure([
+		*     WpConfig::configure([
 		*     	'autop' => false,
 		*     	'blog_feed' => false,
 		*     	'capital_p' => false,
@@ -100,39 +98,39 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     The WP configuration.
 		*
 		*     @type array|false $autop Optional. The WP "autop"ing configuration. See
-		*       `\Wpx\configure_autop` for details.
+		*       `WpConfig::configure_autop` for details.
 		*     @type array|false $blog_feed Optional. The WP blog feed configuration. See
-		*       `\Wpx\configure_blog_feed` for details.
+		*       `WpConfig::configure_blog_feed` for details.
 		*     @type array|false $capital_p Optional. The WP capital P functionality configuration.
-		*       See `\Wpx\configure_capital_p` for details.
+		*       See `WpConfig::configure_capital_p` for details.
 		*     @type array|false $emojis Optional. The WP emojis configuration. See
-		*       `\Wpx\configure_emojis` for details.
+		*       `WpConfig::configure_emojis` for details.
 		*     @type array|false $heartbeat Optional. The WP heartbeat configuration. See
-		*       `\Wpx\configure_heartbeat` for details.
+		*       `WpConfig::configure_heartbeat` for details.
 		*     @type array|false $oembed_provider_support Optional. The WP oEmbed provider support
-		*       configuration. See `\Wpx\configure_oembed_provider_support` for details.
+		*       configuration. See `WpConfig::configure_oembed_provider_support` for details.
 		*     @type array|false $plugin_and_theme_editors Optional. The plugin and theme editors
-		*       configuration. See `\Wpx\configure_plugin_and_theme_editors` for details.
+		*       configuration. See `WpConfig::configure_plugin_and_theme_editors` for details.
 		*     @type array $post_autosave Optional. The WP post autosave configuration. See
-		*       `\Wpx\configure_post_autosave` for details.
+		*       `WpConfig::configure_post_autosave` for details.
 		*     @type array $post_revisions Optional. The WP post revisions configuration. See
-		*       `\Wpx\configure_post_revisions` for details.
+		*       `WpConfig::configure_post_revisions` for details.
 		*     @type array $rest_api Optional. The WP REST API configuration. See
-		*       `\Wpx\configure_rest_api` for details.
+		*       `WpConfig::configure_rest_api` for details.
 		*     @type array|false $self_pinging Optional. The self-pinging configuration. See
-		*       `\Wpx\configure_self_pinging` for details.
+		*       `WpConfig::configure_self_pinging` for details.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
-		*       `\Wpx\configure_texturization` for details.
+		*       `WpConfig::configure_texturization` for details.
 		*     @type array $trash Optional. The WP trash configuration. See
-		*       `\Wpx\configure_trash` for details.
+		*       `WpConfig::configure_trash` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
-		*       `\Wpx\configure_wp_cron` for details.
+		*       `WpConfig::configure_wp_cron` for details.
 		*     @type array $wp_db Optional. The WP DB configuration. See
-		*       `\Wpx\configure_wp_db` for details.
+		*       `WpConfig::configure_wp_db` for details.
 		*     @type array $wp_http Optional. The WP HTTP configuration. See
-		*       `\Wpx\configure_wp_http` for details.
+		*       `WpConfig::configure_wp_http` for details.
 		*     @type array $xmlrpc Optional. The XML-RPC configuration. See
-		*       `\Wpx\configure_xmlrpc` for details.
+		*       `WpConfig::configure_xmlrpc` for details.
 		* }
 		*/
 		public static function configure ( $config = array() ) {
@@ -302,7 +300,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 				remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 
-				add_filter( 'tiny_mce_plugins', '__remove_tiny_mce_emojis_plugin' );
+				add_filter( 'tiny_mce_plugins', __NAMESPACE__ . '\__remove_tiny_mce_emojis_plugin' );
 				add_filter( 'emoji_svg_url', '__return_empty_string' );
 			}
 		}
