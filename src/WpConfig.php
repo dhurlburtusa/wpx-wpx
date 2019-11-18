@@ -651,8 +651,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @param array $config {
 		*     Post revisions configuration.
 		*
+		*     @type bool $html_link Optional. When false, the HTML `link` tag with the REST API
+		*     	URL will be left out of the response. Defaults to true.
+		*     @type bool $link_header Optional. When false, the `Link` response header with the
+		*     	REST API URL will be left out. Defaults to true.
 		*     @type bool $must_be_authenticated Optional. When true, requires the user to be
 		*     	authenticated to use the REST API. Defaults to false.
+		*     @type bool $rsd Optional. When false, the REST API URL will be left out of the RSD
+		*     	response.
 		*     @type string $url_prefix Optional. The URL prefix. Defaults to `wp-json`.
 		* }
 		*/
@@ -667,6 +673,16 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// if ( isset( $config['comment_trashable'] ) ) {
 				// 	// TODO: Search for rest_comment_trashable.
 				// }
+
+				$html_link_config = isset( $config['html_link'] ) ? $config['html_link'] : true;
+				if ( $html_link_config === false ) {
+					remove_action( 'wp_head', 'rest_output_link_wp_head' );
+				}
+
+				$link_header_config = isset( $config['link_header'] ) ? $config['link_header'] : true;
+				if ( $link_header_config === false ) {
+					remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+				}
 
 				if ( isset( $config['must_be_authenticated'] ) ) {
 					$must_be_authenticated = $config['must_be_authenticated'];
@@ -729,6 +745,15 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// 	// - schema
 				// 	// 	+ See https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/
 				// }
+
+				if ( isset( $config['rsd'] ) ) {
+					$rsd = $config['rsd'];
+					if ( $rsd === false ) {
+						// xmlrpc.php?rsd
+						remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+					}
+				}
+
 				if ( isset( $config['url_prefix'] ) ) {
 					$url_prefix = $config['url_prefix'];
 					add_filter( 'rest_url_prefix', function ( $__url_prefix ) use ( $url_prefix ) {
@@ -737,6 +762,32 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				}
 			}
 		}
+
+		// /**
+		// * Configures the Really Simple Discovery (RSD).
+		// *
+		// * This may be called from a plugin or a theme.
+		// *
+		// * Note: Not applicable when XMLRPC is disabled.
+		// *
+		// * @param array $config {
+		// *     RSD configuration.
+		// *
+		// *     @type bool $rest_api Optional. When false, the REST API will be left out of
+		// *       the RSD response. Defaults to true.
+		// * }
+		// */
+		// public static function configure_rsd ( $config = array() ) {
+		// 	if ( is_array( $config ) ) {
+		// 		if ( isset( $config['rest_api'] ) ) {
+		// 			$rest_api = $config['rest_api'];
+		// 			if ( $rest_api === false ) {
+		// 				// xmlrpc.php?rsd
+		// 				remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		/**
 		* Configures self pinging.
@@ -1134,11 +1185,17 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @param array|false $config {
 		*     XML-RPC configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable XML-RPC.
+		*     @type bool $disable Flag indicating whether to disable XML-RPC. When true,
+		*     	not only will the XML-RPC be disabled but other related content will be
+		*     	disabled. For example, the RSD `link` tag will no longer be included in
+		*     	any of the HTML responses since it would just be referring to something
+		*     	that is unavailable.
 		* }
 		*/
 		public static function configure_xmlrpc ( $config = true ) {
 			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+				// No point in returning the RSD link if XML-RPC is disabled.
+				remove_action( 'wp_head', 'rsd_link' );
 				if ( defined( 'XMLRPC_REQUEST' ) ) {
 					add_action( 'wp_loaded', '__404_and_die' );
 				}
