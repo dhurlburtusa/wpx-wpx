@@ -19,7 +19,7 @@
 			"src/bootstrap.php"
 		],
 		"psr-4": {
-			"Wpx\\": "src/"
+			"Wpx\\v0\\": "src/"
 		}
 	},
 	"support": {
