@@ -32,10 +32,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						),
 					),
 					'plugins' => array(
+						// '_pre_mem_usage' => int,
+						'_skip_' => false,
 						'snapshots' => array(
 							// Each item will be like the following.
 							// array( 'id' => string, 'endtime' => float, '_mem_usage' => int )
 						),
+						// 'starttime' => float,
 					),
 					'theme' => array(
 						// 'starttime' => float,
@@ -174,7 +177,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 
 			// Note: The following is not done when `theme_mem_delta` is true because the `setup_theme`
 			// action allows us to accurately set the pre-memory usage for the theme.
-			if ( $mu_plugins_mem_delta === true || $network_plugins_mem_delta === true || $plugins_mem_delta === true ) {
+			if ( $mu_plugins_mem_delta || $network_plugins_mem_delta || $plugins_mem_delta ) {
 				if ( ! isset( $state['request']['_pre_mem_usage'] ) ) {
 					$state['request']['_pre_mem_usage'] = memory_get_usage();
 				}
@@ -183,7 +186,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 			// Ensure wp-includes/plugin.php has already been loaded.
 			if ( function_exists( 'add_action' ) ) {
 
-				if ( $mu_plugins_load_time === true || $mu_plugins_mem_delta === true ) {
+				if ( $mu_plugins_load_time || $mu_plugins_mem_delta ) {
 					add_action( 'mu_plugin_loaded', function ( $mu_plugin ) use ( &$state, $mu_plugins_load_time, $mu_plugins_mem_delta ) {
 						$snapshot = array(
 							'id' => str_replace( WPMU_PLUGIN_DIR . '/', '', $mu_plugin ),
@@ -201,7 +204,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					}, 1 );
 				}
 
-				if ( $network_plugins_load_time === true || $network_plugins_mem_delta === true ) {
+				if ( $network_plugins_load_time || $network_plugins_mem_delta ) {
 					add_action( 'network_plugin_loaded', function ( $network_plugin ) use ( &$state, $network_plugins_load_time, $network_plugins_mem_delta ) {
 						$snapshot = array(
 							'id' => str_replace( WP_PLUGIN_DIR . '/', '', $network_plugin ),
@@ -219,8 +222,58 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					}, 1 );
 				}
 
-				if ( $plugins_load_time === true || $plugins_mem_delta === true ) {
+				if ( $plugins_load_time || $plugins_mem_delta ) {
+					add_action( 'muplugins_loaded', function () use ( &$state, $plugins_load_time, $plugins_mem_delta ) {
+						// HACK: The `active_plugins` option is retrieved just before WP iterates over the
+						// active plugins. We are taking advantage of that fact to get the most accurate
+						// `_pre_mem_usage` and `starttime`.
+						add_filter( 'pre_option_active_plugins', function ( $pre ) use ( &$state, $plugins_load_time, $plugins_mem_delta ) {
+							if ( ! $state['plugins']['_skip_'] ) {
+								if ( $plugins_mem_delta ) {
+									$state['plugins']['_pre_mem_usage'] = memory_get_usage();
+								}
+
+								if ( $plugins_load_time ) {
+									$state['plugins']['starttime'] = microtime( true );
+								}
+							}
+							// `$pre` not being `false` is an indication that another
+							// `pre_option_active_plugins` filter was run that returned a value that represents
+							// the active plugins. Setting `_skip_` to true ensures that the
+							// `option_active_plugins` filter does not change the `_pre_mem_usage` or
+							// `starttime` values. This is probably completely unnecessary. If `$pre` is not
+							// false, then the `option_active_plugins` should not be triggered. This is left in
+							// for robustness.
+							if ( $pre !== false ) {
+								$state['plugins']['_skip_'] = true;
+							}
+							return $pre;
+						}, 9999 );
+						add_filter( 'option_active_plugins', function ( $value ) use ( &$state, $plugins_load_time, $plugins_mem_delta ) {
+							if ( ! $state['plugins']['_skip_'] ) {
+								if ( $plugins_mem_delta ) {
+									$state['plugins']['_pre_mem_usage'] = memory_get_usage();
+								}
+
+								if ( $plugins_load_time ) {
+									$state['plugins']['starttime'] = microtime( true );
+								}
+								$state['plugins']['_skip_'] = true;
+							}
+							return $value;
+						}, 9999 );
+
+						if ( $plugins_mem_delta ) {
+							$state['plugins']['_pre_mem_usage'] = memory_get_usage();
+						}
+
+						if ( $plugins_load_time ) {
+							$state['plugins']['starttime'] = microtime( true );
+						}
+					}, 9999 );
+
 					add_action( 'plugin_loaded', function ( $plugin ) use ( &$state, $plugins_load_time, $plugins_mem_delta ) {
+						$state['plugins']['_skip_'] = true; // Left in for robustness, but is probably unnecessary.
 						$snapshot = array(
 							'id' => str_replace( WP_PLUGIN_DIR . '/', '', $plugin ),
 						);
@@ -263,16 +316,16 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 			}
 
 			if (
-				$req_exec_time === true ||
-				$req_peak_mem_use === true ||
-				$mu_plugins_load_time === true ||
-				$mu_plugins_mem_delta === true ||
-				$plugins_load_time === true ||
-				$plugins_mem_delta === true ||
-				$theme_load_time === true ||
-				$theme_mem_delta === true ||
-				$network_plugins_load_time === true ||
-				$network_plugins_mem_delta === true
+				$req_exec_time ||
+				$req_peak_mem_use ||
+				$mu_plugins_load_time ||
+				$mu_plugins_mem_delta ||
+				$plugins_load_time ||
+				$plugins_mem_delta ||
+				$theme_load_time ||
+				$theme_mem_delta ||
+				$network_plugins_load_time ||
+				$network_plugins_mem_delta
 			) {
 				register_shutdown_function( function () use ( &$state, $mu_plugins_load_time, $mu_plugins_mem_delta, $network_plugins_load_time, $network_plugins_mem_delta, $plugins_load_time, $plugins_mem_delta, $req_exec_time, $req_peak_mem_use, $theme_load_time, $theme_mem_delta ) {
 					// Note: `$timestart` is a global added by WP.
@@ -399,34 +452,16 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						}
 					}
 
-					$plugins_starttime = isset( $state['plugins']['starttime'] ) ? $state['plugins']['starttime'] : $req_starttime;
-					if ( is_numeric( $timestart ) && $timestart > $plugins_starttime ) {
-						$plugins_starttime = $timestart;
-					}
-					if ( $mu_plugins_snapshot_count > 0 ) {
-						$last_mu_plugin_endtime = $state['mu_plugins']['snapshots'][$mu_plugins_snapshot_count - 1]['endtime'];
-						if ( $last_mu_plugin_endtime > $plugins_starttime ) {
-							$plugins_starttime = $last_mu_plugin_endtime;
-						}
-					}
-					if ( $network_plugins_snapshot_count > 0 ) {
-						$last_network_plugin_endtime = $state['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['endtime'];
-						if ( $last_network_plugin_endtime > $plugins_starttime ) {
-							$plugins_starttime = $last_network_plugin_endtime;
-						}
-					}
-
-					$plugins_pre_mem_usage = $network_plugins_pre_mem_usage;
-					if ( $network_plugins_snapshot_count > 0 ) {
-						$plugins_pre_mem_usage = $state['network_plugins']['snapshots'][$network_plugins_snapshot_count - 1]['_mem_usage'];
-					}
-
 					$plugins_snapshots = $state['plugins']['snapshots'];
 					$plugins_snapshot_count = count( $plugins_snapshots );
 
 					if ( $plugins_load_time || $plugins_mem_delta ) {
-						$prev_plugin_endtime = $plugins_starttime;
-						$prev_plugin_mem_usage = $plugins_pre_mem_usage;
+						if ( $plugins_load_time ) {
+							$prev_plugin_endtime = $state['plugins']['starttime'];
+						}
+						if ( $plugins_mem_delta ) {
+							$prev_plugin_mem_usage = $state['plugins']['_pre_mem_usage'];
+						}
 						foreach ( $plugins_snapshots as $snapshot ) {
 							$plugin_id = $snapshot['id'];
 
@@ -451,7 +486,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 						// If there is one or fewer, then don't both logging duplicate information.
 						if ( $plugins_snapshot_count > 1 ) {
 							$endtime = $plugins_snapshots[$plugins_snapshot_count - 1]['endtime'];
-							$duration_us = number_format( 1000000 * ($endtime - $plugins_starttime) );
+							$duration_us = number_format( 1000000 * ($endtime - $state['plugins']['starttime']) );
 
 							error_log( "Loading {$plugins_snapshot_count} regular plugins took about {$duration_us} μs." );
 						}
@@ -460,7 +495,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					if ( $plugins_mem_delta ) {
 						// If there is one or fewer, then don't both logging duplicate information.
 						if ( $plugins_snapshot_count > 1 ) {
-							$memory_delta = $plugins_snapshots[$plugins_snapshot_count - 1]['_mem_usage'] - $plugins_pre_mem_usage;
+							$memory_delta = $plugins_snapshots[$plugins_snapshot_count - 1]['_mem_usage'] - $state['plugins']['_pre_mem_usage'];
 
 							error_log( "Loading {$plugins_snapshot_count} regular plugins changed memory use by " . number_format( $memory_delta ) . ' bytes.' );
 						}
@@ -498,6 +533,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 					error_log( self::$log_separator . " */\n" );
 				} );
 			} // eo if
+			else {
+				register_shutdown_function( function () {
+					error_log( self::$log_separator . " */\n" );
+				} );
+			}
 		} // eo function
 
 	} // eo class WpDebug
