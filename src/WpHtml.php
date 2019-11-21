@@ -120,6 +120,29 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		}
 
 		/**
+		* Convenience function for dequeuing scripts.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: This will still work if called at the beginning of a WP page template
+		* before `wp_head` is called.
+		*
+		* @param string[] $handles The handles of the scripts to dequeue.
+		*/
+		public static function dequeue_scripts ( $handles ) {
+			add_action( 'wp_print_scripts', function () use ( $handles ) {
+				foreach ( $handles as $handle ) {
+					wp_dequeue_script( $handle );
+				}
+			}, 100 );
+			add_action( 'wp_print_footer_scripts', function () use ( $handles ) {
+				foreach ( $handles as $handle ) {
+					wp_dequeue_script( $handle );
+				}
+			}, 100 );
+		}
+
+		/**
 		* Convenience function for dequeuing styles.
 		*
 		* Must be called before the theme calls `wp_head`.
