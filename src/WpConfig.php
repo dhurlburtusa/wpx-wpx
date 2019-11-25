@@ -1,9 +1,9 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
-use function Wpx\v0\__404_and_die;
+use function Wpx\Wpx\v0\__404_and_die;
 
 if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
@@ -121,7 +121,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `WpConfig::configure_self_pinging` for details.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `WpConfig::configure_texturization` for details.
-		*     @type array $trash Optional. The WP trash configuration. See
+		*     @type array|int $trash Optional. The WP trash configuration. See
 		*       `WpConfig::configure_trash` for details.
 		*     @type array $wp_cron Optional. The WP Cron configuration. See
 		*       `WpConfig::configure_wp_cron` for details.
@@ -324,11 +324,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		*     @type bool $disable A flag indicating whether to completely disable the WP
 		*     	heartbeat. If true, then all other configs are ignored.
+		*     @type bool $allow_suspension A flag indicating whether the heartbeat may be
+		*     	suspended. Defaults to false.
 		*     @type int $interval The number of seconds the interval should be.
 		*     @type int $minimalInterval The minimum number of seconds an interval may be.
 		*     	Must be greater than or equal to 0 or less than or equal to 600.
-		*     @type bool $allow_suspension A flag indicating whether the heartbeat may be
-		*     	suspended.
 		* }
 		*/
 		public static function configure_heartbeat ( $config = true ) {
@@ -347,14 +347,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			}
 			elseif ( is_array( $config ) ) {
 				add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
+					if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
+						$settings['suspension'] = 'disabled';
+					}
 					if ( isset( $config['interval'] ) ) {
 						$settings['interval'] = $config['interval'];
 					}
 					if ( isset( $config['minimalInterval'] ) ) {
 						$settings['minimalInterval'] = $config['minimalInterval'];
-					}
-					if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
-						$settings['suspension'] = 'disabled';
 					}
 
 					return $settings;
@@ -746,12 +746,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// 	// 	+ See https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/
 				// }
 
-				if ( isset( $config['rsd'] ) ) {
-					$rsd = $config['rsd'];
-					if ( $rsd === false ) {
-						// xmlrpc.php?rsd
-						remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
-					}
+				$rsd = isset( $config['rsd'] ) ? $config['rsd'] : true;
+				if ( $rsd === false ) {
+					// xmlrpc.php?rsd
+					remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
 				}
 
 				if ( isset( $config['url_prefix'] ) ) {
@@ -910,7 +908,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* plugin, or a normal/standard plugin. Otherwise, the max trash age will
 		* default to the WP default of 30 days.
 		*
-		* @param array|false $config {
+		* @param array|int $config {
 		*     WP trash configuration.
 		*
 		*     @type int $max_age The number of days to keep trashed posts and comments around
@@ -918,16 +916,18 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* }
 		*/
 		public static function configure_trash ( $config ) {
+			$max_age = $config;
+
 			if ( is_array( $config ) ) {
 				$max_age = isset( $config['max_age'] ) ? $config['max_age'] : null;
+			}
 
-				if ( is_numeric( $max_age ) ) {
-					if ( defined( 'EMPTY_TRASH_DAYS' ) ) {
-						trigger_error( __( '`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
-					}
-					else {
-						define( 'EMPTY_TRASH_DAYS', $max_age );
-					}
+			if ( is_numeric( $max_age ) ) {
+				if ( defined( 'EMPTY_TRASH_DAYS' ) ) {
+					trigger_error( __( '`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+				}
+				else {
+					define( 'EMPTY_TRASH_DAYS', $max_age );
 				}
 			}
 		}

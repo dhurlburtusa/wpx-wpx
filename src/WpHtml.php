@@ -1,5 +1,5 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 
@@ -44,6 +44,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*     	link in the document head. Defaults to true.
 		*     @type false $rsd_link Optional. Flag indicating whether to include an RSD link in
 		*     	the document head. Defaults to false.
+		*     @type string[] $scripts Optional. Handles of pre-registered scripts. Defaults to
+		*     	null.
+		*     @type string[] $styles Optional. Handles of pre-registered styles. Defaults to
+		*     	null.
 		*     @type false $shortlink_link Optional. Flag indicating whether to include a short
 		*     	link in the document head. Defaults to false.
 		*     @type false $wlwmanifest_link Optional. Flag indicating whether to include a
@@ -59,6 +63,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			// $rest_link_config = isset( $config['rest_link'] ) ? $config['rest_link'] : true;
 			// $rsd_link_config = isset( $config['rsd_link'] ) ? $config['rsd_link'] : false;
 			$shortlink_link_config = isset( $config['shortlink_link'] ) ? $config['shortlink_link'] : false;
+			$scripts_config = isset( $config['scripts'] ) ? $config['scripts'] : null;
+			$styles_config = isset( $config['styles'] ) ? $config['styles'] : null;
 			$wlwmanifest_link_config = isset( $config['wlwmanifest_link'] ) ? $config['wlwmanifest_link'] : false;
 
 			if ( $adjacent_posts_link_config === false ) {
@@ -100,9 +106,40 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 				self::remove_shortlink_link();
 			}
 
+			if ( is_array( $styles_config ) ) {
+				self::enqueue_styles( $styles_config );
+			}
+
+			if ( is_array( $scripts_config ) ) {
+				self::enqueue_scripts( $scripts_config );
+			}
+
 			if ( $wlwmanifest_link_config === false ) {
 				self::remove_wlwmanifest_link();
 			}
+		}
+
+		/**
+		* Convenience function for dequeuing scripts.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: This will still work if called at the beginning of a WP page template
+		* before `wp_head` is called.
+		*
+		* @param string[] $handles The handles of the scripts to dequeue.
+		*/
+		public static function dequeue_scripts ( $handles ) {
+			add_action( 'wp_print_scripts', function () use ( $handles ) {
+				foreach ( $handles as $handle ) {
+					wp_dequeue_script( $handle );
+				}
+			}, 100 );
+			add_action( 'wp_print_footer_scripts', function () use ( $handles ) {
+				foreach ( $handles as $handle ) {
+					wp_dequeue_script( $handle );
+				}
+			}, 100 );
 		}
 
 		/**

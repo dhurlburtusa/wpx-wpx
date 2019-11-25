@@ -1,9 +1,9 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
-use function \Wpx\v0\__ends_with;
+use function \Wpx\Wpx\v0\__ends_with;
 
 if ( ! class_exists( __NAMESPACE__ . '\Is' ) ) {
 
