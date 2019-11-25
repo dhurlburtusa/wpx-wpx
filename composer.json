@@ -19,11 +19,11 @@
 			"src/bootstrap.php"
 		],
 		"psr-4": {
-			"Wpx\\v0\\": "src/"
+			"Wpx\\Wpx\\v0\\": "src/"
 		}
 	},
 	"support": {
-		"issues": "https://github.com/dhurlburtusa/wpx/issues"
+		"issues": "https://github.com/dhurlburtusa/wpx-wpx/issues"
 	},
 	"require": {
 		"php": "^5.6.20 || ^7"
