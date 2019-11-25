@@ -58,6 +58,48 @@ if ( ! class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 		}
 
 		/**
+		 * Echos the current WP Cache stats.
+		 *
+		 * By default, WordPress uses its own object caching mechanism. If this default
+		 * has not been changed, then the current WP Cache stats will be echoed.
+		 *
+		 * This can be used as a WordPress shutdown action.
+		 *
+		 *     register_shutdown_function( function () {
+		 *     	WpDebug::echo_wp_object_cache_stats();
+		 *     } );
+		 */
+		public static function echo_wp_object_cache_stats_html () {
+			global $wp_object_cache;
+
+			if ( is_object( $wp_object_cache ) ) {
+				$wp_object_cache->stats();
+			}
+		}
+
+		/**
+		 * Generates the current WP Cache stats as HTML.
+		 *
+		 * By default, WordPress uses its own object caching mechanism. If this default
+		 * has not been changed, then the current WP Cache stats will be formatted with
+		 * HTML and returned.
+		 *
+		 * @return {string}
+		 */
+		public static function get_wp_object_cache_stats_html () {
+			global $wp_object_cache;
+
+			$wp_object_cache_stats_html = '';
+			if ( is_object( $wp_object_cache ) ) {
+				ob_start();
+				$wp_object_cache->stats();
+				$wp_object_cache_stats_html = ob_get_contents();
+				ob_end_clean();
+			}
+			return $wp_object_cache_stats_html;
+		}
+
+		/**
 		* Logs information about the request.
 		*
 		* This should be called as early in the request as possible. The earliest possible
