@@ -1,5 +1,5 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 if ( ! defined( 'WPX_WPX_0__VERSION' ) ) {
 	define( 'WPX_WPX_0__VERSION', '0.0.0-alpha.14' );

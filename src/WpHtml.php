@@ -1,5 +1,5 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 

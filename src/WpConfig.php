@@ -1,9 +1,9 @@
 <?php
-namespace Wpx\v0;
+namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
-use function Wpx\v0\__404_and_die;
+use function Wpx\Wpx\v0\__404_and_die;
 
 if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 

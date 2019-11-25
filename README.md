@@ -12,15 +12,15 @@ There are many different ways you can use `Wpx` given its version sub-namespace.
 **Using fully-qualified namespaces**
 
 ```php
-Wpx\v0\WpConfig::configure( ... );
+Wpx\Wpx\v0\WpConfig::configure( ... );
 // Or
-\Wpx\v0\WpConfig::configure( ... );
+\Wpx\Wpx\v0\WpConfig::configure( ... );
 ```
 
 **Using a namespace alias**
 
 ```php
-use Wpx\v0 as Wpx;
+use Wpx\Wpx\v0 as Wpx;
 
 Wpx\WpConfig::configure( ... );
 ```
@@ -28,7 +28,7 @@ Wpx\WpConfig::configure( ... );
 **Import Class**
 
 ```php
-use Wpx\v0\WpConfig;
+use Wpx\Wpx\v0\WpConfig;
 
 WpConfig::configure( ... );
 ```
@@ -36,7 +36,7 @@ WpConfig::configure( ... );
 **Import Class with an Alias**
 
 ```php
-use Wpx\v0\WpConfig as Config;
+use Wpx\Wpx\v0\WpConfig as Config;
 
 Config::configure( ... );
 ```
