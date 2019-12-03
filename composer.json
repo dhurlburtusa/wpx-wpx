@@ -3,6 +3,7 @@
 	"description": "A library to make building WordPress plugins and themes easier.",
 	"keywords": [
 		"library",
+		"performance",
 		"plugins",
 		"themes",
 		"WordPress"
