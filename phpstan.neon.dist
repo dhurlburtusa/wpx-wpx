@@ -1,0 +1,7 @@
+parameters:
+	autoload_files:
+		- %currentWorkingDirectory%/stubs/bootstrap.php
+	ignoreErrors:
+		-
+			message: '#Function Wpx\\Wpx\\v0\\(_remove_tiny_mce_emojis_plugin|_set_disable_wp_cron_to_true|_wp_cron_with_exec_time) not found while trying to analyse it - autoloading is probably not configured properly\.#'
+			path: src/WpConfig.php

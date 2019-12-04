@@ -1,4 +1,5 @@
 <?php
+
 namespace Wpx\Wpx\v0;
 
 if ( ! defined( 'WPX_WPX_0__VERSION' ) ) {
