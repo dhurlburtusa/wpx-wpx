@@ -2,6 +2,8 @@
 
 namespace Wpx\Wpx\v0;
 
+require_once __DIR__ . '/bootstrap.php';
+
 if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 
 	class WpHtml {
