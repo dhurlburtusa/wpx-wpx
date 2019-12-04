@@ -1,47 +1,53 @@
 <?php
+
 namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
 use function Wpx\Wpx\v0\__404_and_die;
 
-if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
-
+if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 	/*
 	* Filter function used to remove the tiny mce emoji plugin.
 	*
 	* @param string[] $plugins
 	* @return string[] The input array with `'wpemoji'` removed.
 	*/
-	function __remove_tiny_mce_emojis_plugin ( $plugins ) {
-		if ( is_array( $plugins ) ) {
-			return array_diff( $plugins, array( 'wpemoji' ) );
+	// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+	function _remove_tiny_mce_emojis_plugin ( $plugins ) {
+		if ( \is_array( $plugins ) ) {
+			return \array_diff( $plugins, array( 'wpemoji' ) );
 		}
 		else {
 			return array();
 		}
 	}
 
-	function __set_disable_wp_cron_to_true () {
-		if ( defined( 'DISABLE_WP_CRON' ) ) {
+	// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+	function _set_disable_wp_cron_to_true () {
+		if ( \defined( 'DISABLE_WP_CRON' ) ) {
 			if ( ! DISABLE_WP_CRON ) {
-				trigger_error( __( '`DISABLE_WP_CRON` has already been defined and set to `false` prior to calling `configure_wp_cron`. It is not uncommon to find it set in `wp-config.php`.' ) );
+				\trigger_error( \__(
+					'`DISABLE_WP_CRON` has already been defined and set to `false` prior to calling `configure_wp_cron`. ' .
+					'It is not uncommon to find it set in `wp-config.php`.'
+				) );
 			}
 		}
 		else {
-			define( 'DISABLE_WP_CRON', true );
+			\define( 'DISABLE_WP_CRON', true );
 		}
 	}
 
+	// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	function _wp_cron_with_exec_time () {
 		global $timestart; // A WP global.
 
-		if ( ! defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
-			$starttime = is_numeric( $timestart ) ? $timestart : microtime( true );
-			wp_cron();
-			$endtime = microtime( true );
+		if ( ! \defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
+			$starttime = \is_numeric( $timestart ) ? $timestart : \microtime( true );
+			\wp_cron();
+			$endtime = \microtime( true );
 			$duration_us = 1000000 * ($endtime - $starttime);
-			error_log("WP-Cron execution time: {$duration_us} μs");
+			\error_log("WP-Cron execution time: {$duration_us} μs");
 		}
 	}
 
@@ -201,16 +207,17 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable WP "autop"ing.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_autop ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
 				foreach ( array( 'term_description', 'get_the_post_type_description' ) as $filter ) {
-					remove_filter( $filter, 'wpautop' );
+					\remove_filter( $filter, 'wpautop' );
 				}
-				remove_filter( 'the_content', 'wpautop' );
-				remove_filter( 'the_excerpt', 'wpautop' );
-				remove_filter( 'comment_text', 'wpautop', 30 );
-				remove_filter( 'widget_text_content', 'wpautop' );
-				remove_filter( 'the_excerpt_embed', 'wpautop' );
+				\remove_filter( 'the_content', 'wpautop' );
+				\remove_filter( 'the_excerpt', 'wpautop' );
+				\remove_filter( 'comment_text', 'wpautop', 30 );
+				\remove_filter( 'widget_text_content', 'wpautop' );
+				\remove_filter( 'the_excerpt_embed', 'wpautop' );
 			}
 		}
 
@@ -228,18 +235,19 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable WP blog feed.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_blog_feed ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
-				remove_action( 'wp_head', 'feed_links_extra', 3 );
-				remove_action( 'wp_head', 'feed_links', 2 );
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+				\remove_action( 'wp_head', 'feed_links_extra', 3 );
+				\remove_action( 'wp_head', 'feed_links', 2 );
 
-				add_action( 'do_feed', '__404_and_die', 1 );
-				add_action( 'do_feed_rdf', '__404_and_die', 1 );
-				add_action( 'do_feed_rss', '__404_and_die', 1 );
-				add_action( 'do_feed_rss2', '__404_and_die', 1 );
-				add_action( 'do_feed_atom', '__404_and_die', 1 );
-				add_action( 'do_feed_rss2_comments', '__404_and_die', 1 );
-				add_action( 'do_feed_atom_comments', '__404_and_die', 1 );
+				\add_action( 'do_feed', '__404_and_die', 1 );
+				\add_action( 'do_feed_rdf', '__404_and_die', 1 );
+				\add_action( 'do_feed_rss', '__404_and_die', 1 );
+				\add_action( 'do_feed_rss2', '__404_and_die', 1 );
+				\add_action( 'do_feed_atom', '__404_and_die', 1 );
+				\add_action( 'do_feed_rss2_comments', '__404_and_die', 1 );
+				\add_action( 'do_feed_atom_comments', '__404_and_die', 1 );
 			}
 		}
 
@@ -258,14 +266,15 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable WP capital P functionality.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_capital_p ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
 				foreach ( array( 'the_content', 'the_title', 'wp_title' ) as $filter ) {
-					remove_filter( $filter, 'capital_P_dangit', 11 );
+					\remove_filter( $filter, 'capital_P_dangit', 11 );
 				}
-				remove_filter( 'comment_text', 'capital_P_dangit', 31 );
+				\remove_filter( 'comment_text', 'capital_P_dangit', 31 );
 
-				remove_filter( 'widget_text_content', 'capital_P_dangit', 11 );
+				\remove_filter( 'widget_text_content', 'capital_P_dangit', 11 );
 			}
 		}
 
@@ -287,21 +296,22 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable WP emojis.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_emojis ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
-				remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-				remove_action( 'admin_print_styles', 'print_emoji_styles' );
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+				\remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+				\remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
-				remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-				remove_action( 'wp_print_styles', 'print_emoji_styles' );
+				\remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+				\remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
-				remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-				remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+				\remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+				\remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
 
-				remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+				\remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 
-				add_filter( 'tiny_mce_plugins', __NAMESPACE__ . '\__remove_tiny_mce_emojis_plugin' );
-				add_filter( 'emoji_svg_url', '__return_empty_string' );
+				\add_filter( 'tiny_mce_plugins', __NAMESPACE__ . '\_remove_tiny_mce_emojis_plugin' );
+				\add_filter( 'emoji_svg_url', '__return_empty_string' );
 			}
 		}
 
@@ -331,22 +341,23 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	Must be greater than or equal to 0 or less than or equal to 600.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_heartbeat ( $config = true ) {
 			$disable = false;
 			if ( $config === false ) {
 				$disable = true;
 			}
-			elseif ( is_array( $config ) && isset( $config['disable'] ) ) {
+			elseif ( \is_array( $config ) && isset( $config['disable'] ) ) {
 				$disable = $config['disable'];
 			}
 
 			if ( $disable ) {
-				add_action( 'init', function () {
-					wp_deregister_script( 'heartbeat' );
+				\add_action( 'init', function () {
+					\wp_deregister_script( 'heartbeat' );
 				}, 1 );
 			}
-			elseif ( is_array( $config ) ) {
-				add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
+			elseif ( \is_array( $config ) ) {
+				\add_filter( 'heartbeat_settings', function ( $settings ) use ( $config ) {
 					if ( isset( $config['allow_suspension'] ) && $config['allow_suspension'] ) {
 						$settings['suspension'] = 'disabled';
 					}
@@ -387,13 +398,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable WP oEmbed provider support.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_oembed_provider_support ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
 				// Remove the oEmbed discovery links from the front-end
-				remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+				\remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 
 				// Remove the oEmbed JavaScript from front-end
-				remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+				\remove_action( 'wp_head', 'wp_oembed_add_host_js' );
 
 				// Note: No reason to dequeue the 'wp-embed' when disabling provider support.
 				// It would, however, be required to disable consumer support. Plus, removing
@@ -414,7 +426,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// 	unset( rest_get_server()->endpoints['/oembed/1.0/embed'] );
 				// } );
 
-				remove_filter( 'rest_pre_serve_request', '_oembed_rest_pre_serve_request' );
+				\remove_filter( 'rest_pre_serve_request', '_oembed_rest_pre_serve_request' );
 
 				// Remove the oembed/1.0/embed REST route.
 				// Note: This is NOT necessary if we don't register the oembed routes in the first
@@ -425,7 +437,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// `embed` route. This removes it from the REST index at `/wp-json/`. Also, it
 				// causes the server to return an error saying the `embed` route does not exist if
 				// someone tries to access it anyway.
-				add_filter( 'rest_endpoints', function ( $endpoints ) {
+				\add_filter( 'rest_endpoints', function ( $endpoints ) {
 					unset( $endpoints['/oembed/1.0/embed'] );
 
 					return $endpoints;
@@ -478,21 +490,26 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       editors.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_plugin_and_theme_editors ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
-				if ( defined( 'DISALLOW_FILE_EDIT' ) ) {
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+				if ( \defined( 'DISALLOW_FILE_EDIT' ) ) {
 					if ( ! DISALLOW_FILE_EDIT ) {
-						add_filter( 'file_mod_allowed', function ( $file_mod_allowed, $context ) {
+						\add_filter( 'file_mod_allowed', function ( $file_mod_allowed, $context ) {
 							if ( $context === 'capability_edit_themes' ) {
 								$file_mod_allowed = true;
 							}
 							return $file_mod_allowed;
 						} );
-						// trigger_error( __( '`DISALLOW_FILE_EDIT` has already been defined and set to `false` prior to calling `configure_plugin_and_theme_editors`. It is not uncommon to find it set in `wp-config.php`.' ) )
+						// \trigger_error( \__(
+						// 	'`DISALLOW_FILE_EDIT` has already been defined and set to `false` prior to calling ' .
+						// 	'`configure_plugin_and_theme_editors`. ' .
+						// 	'It is not uncommon to find it set in `wp-config.php`.'
+						// ) );
 					}
 				}
 				else {
-					define( 'DISALLOW_FILE_EDIT', true );
+					\define( 'DISALLOW_FILE_EDIT', true );
 				}
 			}
 		}
@@ -528,24 +545,29 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	be an integer greater than or equal to 0. Defaults to the WP default which is 60.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_post_autosave ( $config ) {
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				if ( isset( $config['interval'] ) ) {
 					$interval = $config['interval'];
-					if ( ! is_int( $interval ) || $interval < 0 ) {
-						trigger_error( __( '`$config[\'interval\']` must be an integer greater than 0.' ) );
+					if ( ! \is_int( $interval ) || $interval < 0 ) {
+						\trigger_error( \__( '`$config[\'interval\']` must be an integer greater than 0.' ) );
 					}
 					if ( $interval === 0 ) {
-						add_action( 'admin_init', function () {
-							wp_deregister_script( 'autosave' );
+						\add_action( 'admin_init', function () {
+							\wp_deregister_script( 'autosave' );
 						}, 1 );
 					}
 					else {
-						if ( defined( 'AUTOSAVE_INTERVAL' ) ) {
-							trigger_error( __( '`AUTOSAVE_INTERVAL` has already been defined prior to calling `configure_post_autosave`. This function must be called before WordPress defines `AUTOSAVE_INTERVAL` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+						if ( \defined( 'AUTOSAVE_INTERVAL' ) ) {
+							\trigger_error( \__(
+								'`AUTOSAVE_INTERVAL` has already been defined prior to calling `configure_post_autosave`. ' .
+								'This function must be called before WordPress defines `AUTOSAVE_INTERVAL` with the default value. ' .
+								'Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.'
+							) );
 						}
 						else {
-							define( 'AUTOSAVE_INTERVAL', $interval );
+							\define( 'AUTOSAVE_INTERVAL', $interval );
 						}
 					}
 				}
@@ -598,25 +620,32 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	`maximum` is set.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_post_revisions ( $config ) {
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				if ( isset( $config['maximum'] ) ) {
 					$maximum = $config['maximum'];
-					if ( ! is_bool( $maximum ) && ! is_int( $maximum ) && ! is_callable( $maximum ) ) {
-						trigger_error( __( '`$config[\'maximum\']` must be an integer greater than or equal to 0, true, false, or a callable.' ) );
+					if ( ! \is_bool( $maximum ) && ! \is_int( $maximum ) && ! \is_callable( $maximum ) ) {
+						\trigger_error( \__( '`$config[\'maximum\']` must be an integer greater than or equal to 0, true, false, or a callable.' ) );
 					}
 					if ( is_int( $maximum ) && $maximum < 0 ) {
-						trigger_error( __( '`$config[\'maximum\']` must be greater than or equal to 0.' ) );
+						\trigger_error( \__( '`$config[\'maximum\']` must be greater than or equal to 0.' ) );
 					}
-					// if ( defined( 'WP_POST_REVISIONS' ) ) {
-					// 	trigger_error( __( '`WP_POST_REVISIONS` has already been defined prior to calling `configure_post_revisions`. This function must be called before WordPress defines `WP_POST_REVISIONS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+
+					// if ( \defined( 'WP_POST_REVISIONS' ) ) {
+					// 	\trigger_error( \__(
+					// 		'`WP_POST_REVISIONS` has already been defined prior to calling `configure_post_revisions`. ' .
+					// 		'This function must be called before WordPress defines `WP_POST_REVISIONS` with the default value. ' .
+					// 		'Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.'
+					// 	) );
 					// }
 					// else {
-					// 	define( 'WP_POST_REVISIONS', $maximum );
+					// 	\define( 'WP_POST_REVISIONS', $maximum );
 					// }
+
 					$priority = isset( $config['wp_revisions_to_keep_priority'] ) ? $config['wp_revisions_to_keep_priority'] : 100;
-					if ( is_callable( $maximum ) ) {
-						add_filter(
+					if ( \is_callable( $maximum ) ) {
+						\add_filter(
 							'wp_revisions_to_keep',
 							$maximum,
 							$priority,
@@ -624,7 +653,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 						);
 					}
 					else {
-						add_filter(
+						\add_filter(
 							'wp_revisions_to_keep',
 							function ( $num, $post ) use ( $maximum ) {
 								return $maximum;
@@ -662,8 +691,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type string $url_prefix Optional. The URL prefix. Defaults to `wp-json`.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_rest_api ( $config ) {
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				// if ( isset( $config['allow_anonymous_comments'] ) ) {
 				// 	// TODO: Search for rest_allow_anonymous_comments.
 				// }
@@ -676,26 +706,26 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 				$html_link_config = isset( $config['html_link'] ) ? $config['html_link'] : true;
 				if ( $html_link_config === false ) {
-					remove_action( 'wp_head', 'rest_output_link_wp_head' );
+					\remove_action( 'wp_head', 'rest_output_link_wp_head' );
 				}
 
 				$link_header_config = isset( $config['link_header'] ) ? $config['link_header'] : true;
 				if ( $link_header_config === false ) {
-					remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+					\remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 				}
 
 				if ( isset( $config['must_be_authenticated'] ) ) {
 					$must_be_authenticated = $config['must_be_authenticated'];
 					if ( $must_be_authenticated === true ) {
-						if ( version_compare( get_bloginfo( 'version' ), '4.7', '>=' ) ) {
-							add_filter( 'rest_authentication_errors', function ( $error ) {
+						if ( \version_compare( \get_bloginfo( 'version' ), '4.7', '>=' ) ) {
+							\add_filter( 'rest_authentication_errors', function ( $error ) {
 								if ( ! empty( $error ) ) {
 									return $error;
 								}
-								if ( ! is_user_logged_in() ) {
-									$error = new WP_Error(
+								if ( ! \is_user_logged_in() ) {
+									$error = new \WP_Error(
 										'rest_not_logged_in',
-										__( 'You are not currently logged in.' ),
+										\__( 'You are not currently logged in.' ),
 										array( 'status' => 401 )
 									);
 								}
@@ -704,17 +734,17 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 							});
 						}
 						else {
-							add_action( 'wp_loaded', function () {
-								if ( ! is_user_logged_in() ) {
+							\add_action( 'wp_loaded', function () {
+								if ( ! \is_user_logged_in() ) {
 									// TODO: Find out which versions of WP has the following `json_*` filters.
 									// Determine whether to keep or remove theses. Note: Not found in 5.2.4.
 									// REST API 1.x
-									add_filter( 'json_enabled', '__return_false' );
-									add_filter( 'json_jsonp_enabled', '__return_false' );
+									\add_filter( 'json_enabled', '__return_false' );
+									\add_filter( 'json_jsonp_enabled', '__return_false' );
 
 									// REST API 2.x
-									add_filter( 'rest_enabled', '__return_false' );
-									add_filter( 'rest_jsonp_enabled', '__return_false' );
+									\add_filter( 'rest_enabled', '__return_false' );
+									\add_filter( 'rest_jsonp_enabled', '__return_false' );
 								}
 							} );
 						}
@@ -749,12 +779,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				$rsd = isset( $config['rsd'] ) ? $config['rsd'] : true;
 				if ( $rsd === false ) {
 					// xmlrpc.php?rsd
-					remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+					\remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
 				}
 
 				if ( isset( $config['url_prefix'] ) ) {
 					$url_prefix = $config['url_prefix'];
-					add_filter( 'rest_url_prefix', function ( $__url_prefix ) use ( $url_prefix ) {
+					\add_filter( 'rest_url_prefix', function ( $__url_prefix ) use ( $url_prefix ) {
 						return $url_prefix;
 					} );
 				}
@@ -776,12 +806,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		// * }
 		// */
 		// public static function configure_rsd ( $config = array() ) {
-		// 	if ( is_array( $config ) ) {
+		// 	if ( \is_array( $config ) ) {
 		// 		if ( isset( $config['rest_api'] ) ) {
 		// 			$rest_api = $config['rest_api'];
 		// 			if ( $rest_api === false ) {
 		// 				// xmlrpc.php?rsd
-		// 				remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+		// 				\remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
 		// 			}
 		// 		}
 		// 	}
@@ -798,13 +828,14 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     @type bool $disable Flag indicating whether to disable self pinging.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_self_pinging ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
-				add_action( 'pre_ping', function ( &$links ) {
-					$home = get_option( 'home' );
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+				\add_action( 'pre_ping', function ( &$links ) {
+					$home = \get_option( 'home' );
 
 					foreach ( $links as $l => $link ) {
-						if ( 0 === strpos( $link, $home ) ) {
+						if ( 0 === \strpos( $link, $home ) ) {
 							unset( $links[ $l ] );
 						}
 					}
@@ -862,39 +893,46 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       texturization functionality.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_texturization ( $config = true ) {
 			$disable = false;
 			if ( $config === false ) {
 				$disable = true;
 			}
-			elseif ( is_array( $config ) && isset( $config['disable'] ) ) {
+			elseif ( \is_array( $config ) && isset( $config['disable'] ) ) {
 				$disable = $config['disable'];
 			}
 
 			if ( $disable === true ) {
-				foreach ( array( 'comment_author', 'term_name', 'link_name', 'link_description', 'link_notes', 'bloginfo', 'wp_title', 'widget_title' ) as $filter ) {
-					remove_filter( $filter, 'wptexturize' );
+				$filters = array(
+					'comment_author', 'term_name', 'link_name', 'link_description', 'link_notes', 'bloginfo', 'wp_title', 'widget_title'
+				);
+				foreach ( $filters as $filter ) {
+					\remove_filter( $filter, 'wptexturize' );
 				}
 
-				foreach ( array( 'single_post_title', 'single_cat_title', 'single_tag_title', 'single_month_title', 'nav_menu_attr_title', 'nav_menu_description' ) as $filter ) {
-					remove_filter( $filter, 'wptexturize' );
+				$filters = array(
+					'single_post_title', 'single_cat_title', 'single_tag_title', 'single_month_title', 'nav_menu_attr_title', 'nav_menu_description'
+				);
+				foreach ( $filters as $filter ) {
+					\remove_filter( $filter, 'wptexturize' );
 				}
 
 				foreach ( array( 'term_description', 'get_the_post_type_description' ) as $filter ) {
-					remove_filter( $filter, 'wptexturize' );
+					\remove_filter( $filter, 'wptexturize' );
 				}
 
-				remove_filter( 'the_title', 'wptexturize' );
-				remove_filter( 'the_content', 'wptexturize' );
-				remove_filter( 'the_excerpt', 'wptexturize' );
-				remove_filter( 'the_post_thumbnail_caption', 'wptexturize' );
-				remove_filter( 'comment_text', 'wptexturize' );
-				remove_filter( 'list_cats', 'wptexturize' );
-				remove_filter( 'widget_text_content', 'wptexturize' );
-				remove_filter( 'the_excerpt_embed', 'wptexturize' );
+				\remove_filter( 'the_title', 'wptexturize' );
+				\remove_filter( 'the_content', 'wptexturize' );
+				\remove_filter( 'the_excerpt', 'wptexturize' );
+				\remove_filter( 'the_post_thumbnail_caption', 'wptexturize' );
+				\remove_filter( 'comment_text', 'wptexturize' );
+				\remove_filter( 'list_cats', 'wptexturize' );
+				\remove_filter( 'widget_text_content', 'wptexturize' );
+				\remove_filter( 'the_excerpt_embed', 'wptexturize' );
 			}
 			elseif ( $disable === 'completely' ) {
-				add_filter( 'run_wptexturize', '__return_false' );
+				\add_filter( 'run_wptexturize', '__return_false' );
 			}
 		}
 
@@ -915,19 +953,24 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       before they are automatically deleted.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_trash ( $config ) {
 			$max_age = $config;
 
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				$max_age = isset( $config['max_age'] ) ? $config['max_age'] : null;
 			}
 
-			if ( is_numeric( $max_age ) ) {
-				if ( defined( 'EMPTY_TRASH_DAYS' ) ) {
-					trigger_error( __( '`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+			if ( \is_numeric( $max_age ) ) {
+				if ( \defined( 'EMPTY_TRASH_DAYS' ) ) {
+					\trigger_error( \__(
+						'`EMPTY_TRASH_DAYS` has already been defined prior to calling `configure_trash`. ' .
+						'This function must be called before WordPress defines `EMPTY_TRASH_DAYS` with the default value. ' .
+						'Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.'
+					) );
 				}
 				else {
-					define( 'EMPTY_TRASH_DAYS', $max_age );
+					\define( 'EMPTY_TRASH_DAYS', $max_age );
 				}
 			}
 		}
@@ -978,21 +1021,22 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	pending WP-Cron tasks.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_wp_cron ( $config ) {
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				$was_disabled = false;
 				if ( isset( $config['disable'] ) ) {
 					$disable = $config['disable'];
 					if ( $disable === true ) {
-						__set_disable_wp_cron_to_true();
+						_set_disable_wp_cron_to_true();
 						$was_disabled = true;
 					}
 					else if ( $disable === 'completely' ) {
-						if ( defined( 'DOING_CRON' ) ) {
+						if ( \defined( 'DOING_CRON' ) ) {
 							__404_and_die();
 							// add_filter( 'pre_get_ready_cron_jobs', array(), 100 );
 						}
-						__set_disable_wp_cron_to_true();
+						_set_disable_wp_cron_to_true();
 						$was_disabled = true;
 					}
 				}
@@ -1000,15 +1044,17 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 					if ( isset( $config['auto'] ) ) {
 						$auto = $config['auto'];
 						if ( $auto === 'disable' ) {
-							remove_action( 'init', 'wp_cron' );
+							\remove_action( 'init', 'wp_cron' );
 						}
 						else if ( $auto === 'postpone' ) {
-							remove_action( 'init', 'wp_cron' );
-							if ( ! has_action( 'shutdown', 'wp_cron' ) ) {
+							\remove_action( 'init', 'wp_cron' );
+							if ( ! \has_action( 'shutdown', 'wp_cron' ) ) {
 								// PHP complains about passing an argument to `flush` when using:
 								// `add_action( 'shutdown', 'flush' );`
 								// TODO: Confirm that calling `flush` is necessary.
-								add_action( 'shutdown', function () { flush(); } );
+								\add_action( 'shutdown', function () {
+									\flush();
+								} );
 								// TODO: Confirm that calling `fastcgi_finish_request` is necessary. Note: It
 								// should get run when `wp_cron` runs.
 								// if ( function_exists( 'fastcgi_finish_request' ) ) {
@@ -1019,33 +1065,37 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 								// 	session_register_shutdown();
 								// 	add_action( 'shutdown', 'fastcgi_finish_request' );
 								// }
-								add_action( 'shutdown', 'wp_cron' );
+								\add_action( 'shutdown', 'wp_cron' );
 							}
-							if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-								trigger_error( 'WP-Cron is disabled. It will not be postponed.' );
+							if ( \defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+								\trigger_error( 'WP-Cron is disabled. It will not be postponed.' );
 							}
 						}
 					}
 
 					if ( isset( $config['lock_timeout'] ) ) {
-						if ( defined( 'WP_CRON_LOCK_TIMEOUT' ) ) {
-							trigger_error( __( '`WP_CRON_LOCK_TIMEOUT` has already been defined prior to calling `configure_wp_cron`. This function must be called before WordPress defines `WP_CRON_LOCK_TIMEOUT` with the default value. Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.' ) );
+						if ( \defined( 'WP_CRON_LOCK_TIMEOUT' ) ) {
+							\trigger_error( \__(
+								'`WP_CRON_LOCK_TIMEOUT` has already been defined prior to calling `configure_wp_cron`. ' .
+								'This function must be called before WordPress defines `WP_CRON_LOCK_TIMEOUT` with the default value. ' .
+								'Call this function during or before the `plugins_loaded` action. Calling in a plugin is an ideal place.'
+							) );
 						}
 						else {
-							define( 'WP_CRON_LOCK_TIMEOUT', $config['lock_timeout'] );
+							\define( 'WP_CRON_LOCK_TIMEOUT', $config['lock_timeout'] );
 						}
 					}
 
 					// Note: This code must come after the processing of the `$config['auto']` config.
 					if ( isset( $config['log_execution'] ) ) {
 						if ( $config['log_execution'] === true ) {
-							if ( has_action( 'init', 'wp_cron' ) ) {
-								remove_action( 'init', 'wp_cron' );
-								add_action( 'init', '_wp_cron_with_exec_time' );
+							if ( \has_action( 'init', 'wp_cron' ) ) {
+								\remove_action( 'init', 'wp_cron' );
+								\add_action( 'init', __NAMESPACE__ . '\_wp_cron_with_exec_time' );
 							}
-							if ( has_action( 'shutdown', 'wp_cron' ) ) {
-								remove_action( 'shutdown', 'wp_cron' );
-								add_action( 'shutdown', '_wp_cron_with_exec_time' );
+							if ( \has_action( 'shutdown', 'wp_cron' ) ) {
+								\remove_action( 'shutdown', 'wp_cron' );
+								\add_action( 'shutdown', __NAMESPACE__ . '\_wp_cron_with_exec_time' );
 							}
 						}
 					}
@@ -1073,25 +1123,29 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	were executed during the request.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_wp_db ( $config ) {
 			global $wpdb;
 
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				if ( isset( $config['log_queries'] ) ) {
 					if ( $config['log_queries'] === true ) {
-
-						if ( defined( 'SAVEQUERIES' ) ) {
+						if ( \defined( 'SAVEQUERIES' ) ) {
 							if ( ! SAVEQUERIES ) {
-								trigger_error( __( '`SAVEQUERIES` has already been defined as falsey prior to calling `configure_wp_db`. This function must be called before `SAVEQUERIES` is defined to something other than a truthy value. Calling in a must-use plugin is the ideal place.' ) );
+								\trigger_error( \__(
+									'`SAVEQUERIES` has already been defined as falsey prior to calling `configure_wp_db`. ' .
+									'This function must be called before `SAVEQUERIES` is defined to something other than a truthy value. ' .
+									'Calling in a must-use plugin is the ideal place.'
+								) );
 							}
 						}
 						else {
-							define( 'SAVEQUERIES', true );
+							\define( 'SAVEQUERIES', true );
 						}
 
-						add_action( 'shutdown', function () {
+						\add_action( 'shutdown', function () {
 							global $wpdb;
-							error_log( print_r( $wpdb->queries, true ) );
+							\error_log( \print_r( $wpdb->queries, true ) );
 						} );
 					}
 				}
@@ -1128,36 +1182,43 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     }
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_wp_http ( $config ) {
-			if ( is_array( $config ) ) {
+			if ( \is_array( $config ) ) {
 				$access = isset( $config['access'] ) ? $config['access'] : null;
-				if ( is_array( $access ) ) {
+				if ( \is_array( $access ) ) {
 					$external = isset( $access['external'] ) ? $access['external'] : true;
 					if ( $external === false ) {
-						if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) ) {
+						if ( \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) ) {
 							if ( ! WP_HTTP_BLOCK_EXTERNAL ) {
-								trigger_error( __( '`WP_HTTP_BLOCK_EXTERNAL` has already been defined and set to falsey prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+								\trigger_error( \__(
+									'`WP_HTTP_BLOCK_EXTERNAL` has already been defined and set to falsey prior to calling `configure_wp_http`. ' .
+									'It is not uncommon to find it set in `wp-config.php`.'
+								) );
 							}
 						}
 						else {
-							define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+							\define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 						}
 					}
 					$local = isset( $access['local'] ) ? $access['local'] : true;
 					if ( $local === false ) {
-						add_filter( 'block_local_requests', '__return_true' );
+						\add_filter( 'block_local_requests', '__return_true' );
 					}
 					$allow = isset( $access['allow'] ) ? $access['allow'] : '';
 					if ( ! empty( $allow ) ) {
 						$accessible_hosts = $allow;
-						if ( is_array( $accessible_hosts ) ) {
-							$accessible_hosts = implode( ',', $accessible_hosts );
+						if ( \is_array( $accessible_hosts ) ) {
+							$accessible_hosts = \implode( ',', $accessible_hosts );
 						}
-						if ( defined( 'WP_ACCESSIBLE_HOSTS' ) ) {
-							trigger_error( __( '`WP_ACCESSIBLE_HOSTS` has already been defined prior to calling `configure_wp_http`. It is not uncommon to find it set in `wp-config.php`.' ) );
+						if ( \defined( 'WP_ACCESSIBLE_HOSTS' ) ) {
+							\trigger_error( \__(
+								'`WP_ACCESSIBLE_HOSTS` has already been defined prior to calling `configure_wp_http`. ' .
+								'It is not uncommon to find it set in `wp-config.php`.'
+							) );
 						}
 						else {
-							define( 'WP_ACCESSIBLE_HOSTS', $accessible_hosts );
+							\define( 'WP_ACCESSIBLE_HOSTS', $accessible_hosts );
 						}
 					}
 				}
@@ -1192,12 +1253,13 @@ if ( ! class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     	that is unavailable.
 		* }
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function configure_xmlrpc ( $config = true ) {
-			if ( $config === false || ( is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
+			if ( $config === false || ( \is_array( $config ) && isset( $config['disable'] ) && $config['disable'] === true ) ) {
 				// No point in returning the RSD link if XML-RPC is disabled.
-				remove_action( 'wp_head', 'rsd_link' );
-				if ( defined( 'XMLRPC_REQUEST' ) ) {
-					add_action( 'wp_loaded', '__404_and_die' );
+				\remove_action( 'wp_head', 'rsd_link' );
+				if ( \defined( 'XMLRPC_REQUEST' ) ) {
+					\add_action( 'wp_loaded', '__404_and_die' );
 				}
 				// add_filter( 'wp_xmlrpc_server_class', function () { return 'not_found_wp_xmlrpc_server'; } );
 				// add_filter( 'xmlrpc_enabled', function () {

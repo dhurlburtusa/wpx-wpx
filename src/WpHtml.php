@@ -1,7 +1,10 @@
 <?php
+
 namespace Wpx\Wpx\v0;
 
-if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
+require_once __DIR__ . '/bootstrap.php';
+
+if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 
 	class WpHtml {
 
@@ -78,9 +81,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			if ( $generator_meta_config === false ) {
 				self::remove_generator_meta();
 			}
-			else if ( is_string( $generator_meta_config ) ) {
-				remove_action( 'wp_head', 'wp_generator' );
-				add_filter( 'the_generator', function () {
+			else if ( \is_string( $generator_meta_config ) ) {
+				\remove_action( 'wp_head', 'wp_generator' );
+				\add_filter( 'the_generator', function () use ( $generator_meta_config ) {
 					return $generator_meta_config;
 				}, 100 );
 			}
@@ -90,7 +93,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			if ( $meta_viewport_config === true ) {
 				self::set_meta_viewport();
 			}
-			else if ( is_string( $meta_viewport_config ) ) {
+			else if ( \is_string( $meta_viewport_config ) ) {
 				self::set_meta_viewport( $meta_viewport_config );
 			}
 
@@ -106,11 +109,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 				self::remove_shortlink_link();
 			}
 
-			if ( is_array( $styles_config ) ) {
+			if ( \is_array( $styles_config ) ) {
 				self::enqueue_styles( $styles_config );
 			}
 
-			if ( is_array( $scripts_config ) ) {
+			if ( \is_array( $scripts_config ) ) {
 				self::enqueue_scripts( $scripts_config );
 			}
 
@@ -129,15 +132,16 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*
 		* @param string[] $handles The handles of the scripts to dequeue.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function dequeue_scripts ( $handles ) {
-			add_action( 'wp_print_scripts', function () use ( $handles ) {
+			\add_action( 'wp_print_scripts', function () use ( $handles ) {
 				foreach ( $handles as $handle ) {
-					wp_dequeue_script( $handle );
+					\wp_dequeue_script( $handle );
 				}
 			}, 100 );
-			add_action( 'wp_print_footer_scripts', function () use ( $handles ) {
+			\add_action( 'wp_print_footer_scripts', function () use ( $handles ) {
 				foreach ( $handles as $handle ) {
-					wp_dequeue_script( $handle );
+					\wp_dequeue_script( $handle );
 				}
 			}, 100 );
 		}
@@ -152,10 +156,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*
 		* @param string[] $handles The handles of the styles to dequeue.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function dequeue_styles ( $handles ) {
-			add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
+			\add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
 				foreach ( $handles as $handle ) {
-					wp_dequeue_style( $handle );
+					\wp_dequeue_style( $handle );
 				}
 			}, 100 );
 		}
@@ -165,8 +170,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*
 		* By default, the WP text widget does not recognize shortcodes.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function enable_text_widget_shortcodes () {
-			add_filter( 'widget_text', 'do_shortcode' );
+			\add_filter( 'widget_text', 'do_shortcode' );
 		}
 
 		/**
@@ -182,10 +188,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*   priority affects where in the markup the style is inserted which affects the
 		*   CSS cascade. Defaults to 110.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function enqueue_scripts ( $handles, $priority = 110 ) {
-			add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
+			\add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
 				foreach ( $handles as $handle ) {
-					wp_enqueue_script( $handle );
+					\wp_enqueue_script( $handle );
 				}
 			}, $priority );
 		}
@@ -203,10 +210,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*   priority affects where in the markup the style is inserted which affects the
 		*   CSS cascade. Defaults to 100.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function enqueue_styles ( $handles, $priority = 100 ) {
-			add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
+			\add_action( 'wp_enqueue_scripts', function () use ( $handles ) {
 				foreach ( $handles as $handle ) {
-					wp_enqueue_style( $handle );
+					\wp_enqueue_style( $handle );
 				}
 			}, $priority );
 		}
@@ -224,8 +232,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_adjacent_posts_link () {
-			remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
+			\remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
 		}
 
 		/**
@@ -240,8 +249,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_canonical_link () {
-			remove_action( 'wp_head', 'rel_canonical' );
+			\remove_action( 'wp_head', 'rel_canonical' );
 		}
 
 		/**
@@ -252,9 +262,10 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_generator_meta ( $priority = 100 ) {
-			remove_action( 'wp_head', 'wp_generator' );
-			add_filter( 'the_generator', '__return_empty_string', $priority );
+			\remove_action( 'wp_head', 'wp_generator' );
+			\add_filter( 'the_generator', '__return_empty_string', $priority );
 		}
 
 		// /**
@@ -265,8 +276,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		// * Note: This will still work if called at the beginning of a WP page template
 		// * before `wp_head` is called.
 		// */
+		// // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		// public static function remove_oembed_discovery_links () {
-		// 	remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+		// 	\remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 		// }
 
 		// /**
@@ -280,8 +292,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		// *
 		// * Note: This does not affect the oEmbed script used in the WP admin.
 		// */
+		// // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		// public static function remove_oembed_script () {
-		// 	remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+		// 	\remove_action( 'wp_head', 'wp_oembed_add_host_js' );
 		// }
 
 		// /**
@@ -292,8 +305,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		// * Note: This will still work if called at the beginning of a WP page template
 		// * before `wp_head` is called.
 		// */
+		// // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		// public static function remove_rest_link () {
-		// 	remove_action( 'wp_head', 'rest_output_link_wp_head' );
+		// 	\remove_action( 'wp_head', 'rest_output_link_wp_head' );
 		// }
 
 		// /**
@@ -312,8 +326,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		// *
 		// * Although, `wp_loaded` is arguably the ideal action.
 		// */
+		// // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		// public static function remove_rest_link_header () {
-		// 	remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+		// 	\remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 		// }
 
 		/**
@@ -327,8 +342,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*
 		* Note: This is automatically done when XML-RPC is disabled.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_rsd_link () {
-			remove_action( 'wp_head', 'rsd_link' );
+			\remove_action( 'wp_head', 'rsd_link' );
 		}
 
 		/**
@@ -339,8 +355,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_shortlink_link () {
-			remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+			\remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 		}
 
 		/**
@@ -352,8 +369,9 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: This will still work if called at the beginning of a WP page template
 		* before `wp_head` is called.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_wlwmanifest_link () {
-			remove_action( 'wp_head', 'wlwmanifest_link' );
+			\remove_action( 'wp_head', 'wlwmanifest_link' );
 		}
 
 		/**
@@ -369,10 +387,11 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* 	admin under Settings > Reading. This setting only shows up if it is not set to
 		* 	`UTF-8`.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function set_meta_charset ( $charset = true ) {
 			// Get the default if NULL.
 			if ( $charset === true ) {
-				$charset = get_bloginfo( 'charset' );
+				$charset = \get_bloginfo( 'charset' );
 			}
 			/*
 			* It is recommended that the charset meta tag is one of the first two tags in the
@@ -380,8 +399,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			*
 			* See https://htmlhead.dev/.
 			*/
-			add_action( 'wp_head', function () use ( $charset ) {
-				echo '<meta charset="' . esc_attr( $charset ) . '">' . "\n";
+			\add_action( 'wp_head', function () use ( $charset ) {
+				echo '<meta charset="' . \esc_attr( $charset ) . '">' . "\n";
 			}, 0 );
 		}
 
@@ -397,6 +416,7 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* 	Defaults to `'width=device-width, initial-scale=1'` which is that standard
 		* 	for a responsive web site.
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function set_meta_viewport ( $viewport = 'width=device-width, initial-scale=1' ) {
 			/*
 			* It is recommended that the viewport meta tag is one of the first two tags in the
@@ -404,8 +424,8 @@ if ( ! class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			*
 			* See https://htmlhead.dev/.
 			*/
-			add_action( 'wp_head', function () use ( $viewport ) {
-				echo '<meta name="viewport" content="' . esc_attr( $viewport ) . '">' . "\n";
+			\add_action( 'wp_head', function () use ( $viewport ) {
+				echo '<meta name="viewport" content="' . \esc_attr( $viewport ) . '">' . "\n";
 			}, 0 );
 		}
 

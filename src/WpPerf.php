@@ -1,7 +1,10 @@
 <?php
+
 namespace Wpx\Wpx\v0;
 
-if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
+require_once __DIR__ . '/bootstrap.php';
+
+if ( ! \class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 
 	class WpPerf {
 
@@ -18,11 +21,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 		*
 		* @see https://developer.wordpress.org/reference/functions/get_stylesheet_directory/
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function get_stylesheet_directory () {
 			static $dir;
 
 			if ( ! $dir ) {
-				$dir = get_stylesheet_directory();
+				$dir = \get_stylesheet_directory();
 			}
 
 			return $dir;
@@ -38,11 +42,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 		*
 		* @see https://developer.wordpress.org/reference/functions/get_stylesheet_directory_uri/
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function get_stylesheet_directory_uri () {
 			static $uri;
 
 			if ( ! $uri ) {
-				$uri = get_stylesheet_directory_uri();
+				$uri = \get_stylesheet_directory_uri();
 			}
 
 			return $uri;
@@ -58,11 +63,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 		*
 		* @see https://developer.wordpress.org/reference/functions/get_stylesheet_uri/
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function get_stylesheet_uri () {
 			static $uri;
 
 			if ( ! $uri ) {
-				$uri = get_stylesheet_uri();
+				$uri = \get_stylesheet_uri();
 			}
 
 			return $uri;
@@ -78,11 +84,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 		*
 		* @see https://developer.wordpress.org/reference/functions/get_template_directory/
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function get_template_directory () {
 			static $dir;
 
 			if ( ! $dir ) {
-				$dir = get_template_directory();
+				$dir = \get_template_directory();
 			}
 
 			return $dir;
@@ -98,11 +105,12 @@ if ( ! class_exists( __NAMESPACE__ . '\WpPerf' ) ) {
 		*
 		* @see https://developer.wordpress.org/reference/functions/get_template_directory_uri/
 		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function get_template_directory_uri () {
 			static $uri;
 
 			if ( ! $uri ) {
-				$uri = get_template_directory_uri();
+				$uri = \get_template_directory_uri();
 			}
 
 			return $uri;

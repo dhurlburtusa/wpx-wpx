@@ -2,4 +2,7 @@
 /doc export-ignore
 /tests export-ignore
 
+/grumphp.yml export-ignore
+/phpcs.xml export-ignore
+/phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
