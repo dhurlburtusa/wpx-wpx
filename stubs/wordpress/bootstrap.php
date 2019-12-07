@@ -13,4 +13,5 @@ require_once __DIR__ . '/wp-includes/l10n.php';
 require_once __DIR__ . '/wp-includes/option.php';
 require_once __DIR__ . '/wp-includes/pluggable.php';
 require_once __DIR__ . '/wp-includes/plugin.php';
+require_once __DIR__ . '/wp-includes/post-template.php';
 require_once __DIR__ . '/wp-includes/theme.php';
