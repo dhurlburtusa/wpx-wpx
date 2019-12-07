@@ -7,6 +7,7 @@ function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 
 }
 
 function apply_filters( $tag, $value ) {
+	return $value;
 }
 
 function do_action( $tag, $arg = '' ) {
