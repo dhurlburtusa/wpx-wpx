@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 
 use Wpx\Wpx\v0\Is;
 
-final class ScriptsTest extends TestCase {
+final class IsTest extends TestCase {
 
 	protected function setUp(): void {
 	}
 
-	public function test_Is_Local_when_SERVER_ADDR_is_IPv4_loopback(): void {
+	public function test_Is_local_when_SERVER_ADDR_is_IPv4_loopback(): void {
 		try {
 			$_SERVER['SERVER_ADDR'] = '127.0.0.1';
 			$this->assertEquals( true, Is::local() );
@@ -25,7 +25,7 @@ final class ScriptsTest extends TestCase {
 		}
 	}
 
-	public function test_Is_Local_when_HTTP_HOST_ends_with_dot_local(): void {
+	public function test_Is_local_when_HTTP_HOST_ends_with_dot_local(): void {
 		try {
 			$_SERVER['HTTP_HOST'] = 'example.local';
 			$this->assertEquals( true, Is::local() );
@@ -35,7 +35,7 @@ final class ScriptsTest extends TestCase {
 		}
 	}
 
-	public function test_Is_Local_when_SERVER_NAME_ends_with_dot_local(): void {
+	public function test_Is_local_when_SERVER_NAME_ends_with_dot_local(): void {
 		try {
 			$_SERVER['SERVER_NAME'] = 'example.local';
 			$this->assertEquals( true, Is::local() );

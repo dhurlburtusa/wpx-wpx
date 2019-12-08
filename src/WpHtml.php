@@ -4,9 +4,45 @@ namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
+use Wpx\Wpx\v0\Html;
+
 if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 
 	class WpHtml {
+
+		/**
+		* Gets the `body` tag's attributes.
+		*
+		* Note: `get_body_class` is called to get the body class attribute from WP based
+		* on the current request.
+		* Note: Use the standard `body_class` filter to filter the `class` attribute.
+		*
+		* @param array $attrs {
+		*     The `body` tag attributes.
+		*
+		*     @type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
+		*     	Defaults to `''`.
+		* }
+		*
+		* @return string
+		*
+		* @see Wpx\Wpx\v0\Html::attrs
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function body_attrs ( $attrs = array() ) {
+			if ( ! isset( $attrs['class'] ) ) {
+				$attrs['class'] = '';
+			}
+			$attrs['class'] = \get_body_class( $attrs['class'] );
+
+			if ( $attrs['class'] === '' ) {
+				$attrs['class'] = null;
+			}
+
+			$html = Html::attrs( $attrs );
+			$html = \apply_filters( 'wpx_wpx__the_body_attrs', $html );
+			return $html;
+		}
 
 		/**
 		* Convenience function for configuring an HTML response.
@@ -220,6 +256,54 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		}
 
 		/**
+		* Gets the `html` tag's attributes.
+		*
+		* @param array $attrs {
+		*     The `html` tag attributes.
+		*
+		*     @type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
+		*     	Defaults to `''`.
+		* }
+		*
+		* @return string
+		*
+		* @see Wpx\Wpx\v0\Html::attrs
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function html_attrs ( $attrs = array() ) {
+			$def_dir = null;
+			$def_lang = null;
+
+			$has_dir = ! empty( $attrs['dir'] );
+			$has_lang = ! empty( $attrs['lang'] );
+
+			// If the `dir` or `lang` is not set, then get the default values.
+			if ( ! $has_dir || ! $has_lang ) {
+				$dir_lang_attrs = \get_language_attributes();
+
+				if ( ! $has_dir ) {
+					preg_match( '/dir=["\']([^"\']+)["\']/', $dir_lang_attrs, $matches );
+					if ( count( $matches ) === 2 ) {
+						$def_dir = $matches[1];
+					}
+					$attrs['dir'] = $def_dir;
+				}
+
+				if ( ! $has_lang ) {
+					preg_match( '/lang=["\']([^"\']+)["\']/', $dir_lang_attrs, $matches );
+					if ( count( $matches ) === 2 ) {
+						$def_lang = $matches[1];
+					}
+					$attrs['lang'] = $def_lang;
+				}
+			}
+
+			$html = Html::attrs( $attrs );
+			$html = \apply_filters( 'wpx_wpx__the_html_attrs', $html );
+			return $html;
+		}
+
+		/**
 		* Prevents WordPress from adding relational links for adjacent posts in the
 		* document head.
 		*
@@ -427,6 +511,46 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			\add_action( 'wp_head', function () use ( $viewport ) {
 				echo '<meta name="viewport" content="' . \esc_attr( $viewport ) . '">' . "\n";
 			}, 0 );
+		}
+
+		/**
+		* Outputs the `body` tag's attributes.
+		*
+		* Note: `get_body_class` is called to get the body class attribute from WP based
+		* on the current request.
+		* Note: Use the standard `body_class` filter to filter the `class` attribute.
+		*
+		* @param array $attrs {
+		*     The `body` tag attributes.
+		*
+		*     @type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
+		*     	Defaults to `''`.
+		* }
+		*
+		* @see Wpx\Wpx\v0\WpHtml::body_attrs
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function the_body_attrs ( $attrs = array() ) {
+			$html = self::body_attrs( $attrs );
+			echo $html;
+		}
+
+		/**
+		* Outputs the `html` tag's attributes.
+		*
+		* @param array $attrs {
+		*     The `html` tag attributes.
+		*
+		*     @type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
+		*     	Defaults to `''`.
+		* }
+		*
+		* @see Wpx\Wpx\v0\Html::attrs
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function the_html_attrs ( $attrs = array() ) {
+			$html = self::html_attrs( $attrs );
+			echo $html;
 		}
 
 	} // eo class WpHtml
