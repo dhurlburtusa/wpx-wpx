@@ -23,4 +23,8 @@ final class WpThemeTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpTheme', 'determine_template_candidates' ) );
 	}
 
+	public function test_WpTheme_has_skip_template_hierarchy_method(): void {
+		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpTheme', 'skip_template_hierarchy' ) );
+	}
+
 }

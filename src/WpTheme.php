@@ -559,6 +559,200 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 			return $template_candidates;
 		}
 
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		protected static function get_template_types () {
+			static $template_types = null;
+
+			if ( $template_types === null ) {
+				$template_types = array(
+					'404',
+					'archive',
+					'attachment',
+					'author',
+					'category',
+					'date',
+					'embed',
+					'frontpage',
+					'home',
+					'index',
+					'page',
+					'paged',
+					'privacypolicy',
+					'search',
+					'single',
+					'singular',
+					'tag',
+					'taxonomy',
+				);
+			}
+
+			return $template_types;
+		}
+
+		/**
+		* Causes WordPress to skip running the template hierarchy algorithm.
+		*
+		* The ideal place to call this function is in the callback to the `wp` action.
+		* This would usually be done in the theme's `functions.php` file.
+		*
+		*     // functions.php
+		*
+		*     use Wtf\Wp\v0\WpTheme;
+		*
+		*     add_action( 'wp', function () {
+		*     	WpTheme::skip_template_hierarchy();
+		*     } );
+		*
+		*     // Or more succinctly:
+		*     add_action( 'wp', 'Wtf\Wp\v0\WpTheme::skip_template_hierarchy' );
+		*
+		* Note: The `wp_loaded` action can be used too but the WP_Query has not been run
+		* at that point.
+		*
+		* Currently, the `template_redirect` action hook is the last place where this
+		* function can be called and have any effect. However, that hook should only be
+		* used when an actual redirect is intended.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function skip_template_hierarchy () {
+			// There are at least 3 ways to implement this behavior. All appear to perform
+			// at about the same speed. However, option 3 is the easiest to maintain.
+
+			// Option 1:
+			// ---------
+			//
+			// This option won't work if `wp()` has not been called yet because the conditional
+			// tags used by this option are not ready to be used. Therefore, even the
+			// `wp_loaded` action hook is too late.
+
+			// if ( is_embed() ) {
+			// 	\add_filter( 'embed_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'embed_template', '__return_true' );
+			// }
+			// elseif ( is_404() ) {
+			// 	\add_filter( '404_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( '404_template', '__return_true' );
+			// }
+			// elseif ( is_search() ) {
+			// 	\add_filter( 'search_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'search_template', '__return_true' );
+			// }
+			// elseif ( is_front_page() ) {
+			// 	\add_filter( 'frontpage_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'frontpage_template', '__return_true' );
+			// }
+			// elseif ( is_home() ) {
+			// 	\add_filter( 'home_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'home_template', '__return_true' );
+			// }
+			// elseif ( is_privacy_policy() ) {
+			// 	\add_filter( 'privacypolicy_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'privacypolicy_template', '__return_true' );
+			// }
+			// elseif ( is_post_type_archive() ) {
+			// 	\add_filter( 'archive_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'archive_template', '__return_true' );
+			// }
+			// elseif ( is_tax() ) {
+			// 	\add_filter( 'taxonomy_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'taxonomy_template', '__return_true' );
+			// }
+			// elseif ( is_attachment() ) {
+			// 	\add_filter( 'attachment_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'attachment_template', '__return_true' );
+			// }
+			// elseif ( is_single() ) {
+			// 	\add_filter( 'single_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'single_template', '__return_true' );
+			// }
+			// elseif ( is_page() ) {
+			// 	\add_filter( 'page_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'page_template', '__return_true' );
+			// }
+			// elseif ( is_singular() ) {
+			// 	\add_filter( 'singular_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'singular_template', '__return_true' );
+			// }
+			// elseif ( is_category() ) {
+			// 	\add_filter( 'category_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'category_template', '__return_true' );
+			// }
+			// elseif ( is_tag() ) {
+			// 	\add_filter( 'tag_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'tag_template', '__return_true' );
+			// }
+			// elseif ( is_author() ) {
+			// 	\add_filter( 'author_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'author_template', '__return_true' );
+			// }
+			// elseif ( is_date() ) {
+			// 	\add_filter( 'date_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'date_template', '__return_true' );
+			// }
+			// elseif ( is_archive() ) {
+			// 	\add_filter( 'archive_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'archive_template', '__return_true' );
+			// }
+			// else {
+			// 	\add_filter( 'index_template_hierarchy', '__return_empty_array' );
+			// 	\add_filter( 'index_template', '__return_true' );
+			// }
+
+			// Option 2:
+			// ---------
+
+			// \add_filter( '404_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'archive_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'attachment_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'author_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'category_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'date_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'embed_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'frontpage_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'home_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'page_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'paged_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'privacypolicy_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'search_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'single_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'singular_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'tag_template_hierarchy', '__return_empty_array' );
+			// \add_filter( 'taxonomy_template_hierarchy', '__return_empty_array' );
+
+			// \add_filter( '404_template', '__return_true' );
+			// \add_filter( 'archive_template', '__return_true' );
+			// \add_filter( 'attachment_template', '__return_true' );
+			// \add_filter( 'author_template', '__return_true' );
+			// \add_filter( 'category_template', '__return_true' );
+			// \add_filter( 'date_template', '__return_true' );
+			// \add_filter( 'embed_template', '__return_true' );
+			// \add_filter( 'frontpage_template', '__return_true' );
+			// \add_filter( 'home_template', '__return_true' );
+			// \add_filter( 'page_template', '__return_true' );
+			// \add_filter( 'paged_template', '__return_true' );
+			// \add_filter( 'privacypolicy_template', '__return_true' );
+			// \add_filter( 'search_template', '__return_true' );
+			// \add_filter( 'single_template', '__return_true' );
+			// \add_filter( 'singular_template', '__return_true' );
+			// \add_filter( 'tag_template', '__return_true' );
+			// \add_filter( 'taxonomy_template', '__return_true' );
+
+			// Option 3:
+			// ---------
+
+			$template_types = self::get_template_types();
+			foreach ( $template_types as $template_type ) {
+				\add_filter( "{$template_type}_template_hierarchy", '__return_empty_array' );
+				\add_filter( "{$template_type}_template", '__return_true' );
+			}
+
+			// Option 4:
+			// ---------
+			// This option requires that core add the `skip_template_hierarchy` filter.
+
+			// \add_filter( 'skip_template_hierarchy', '__return_true' );
+		}
+
 	} // eo class WpTheme
 
 } // eo if ( class_exists )
