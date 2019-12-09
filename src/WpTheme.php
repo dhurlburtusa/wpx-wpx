@@ -8,6 +8,278 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 
 	class WpTheme {
 
+		/**
+		* Sets up theme support.
+		*
+		* Use the `wtf_wp__theme_support` filter to adjust the default theme support
+		* configuration.
+		*
+		* // TODO: Document parameter.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function add_theme_support ( $theme_support ) {
+			// $default_theme_support = self::get_default_theme_support();
+			// /**
+			// * Filters the default theme support. This is how themes get to change the theme
+			// * support configuration.
+			// *
+			// * @param array $default_theme_support The default theme support as an associative
+			// *   array.
+			// */
+			// $final_theme_support = apply_filters( 'wtf_wp__theme_support', $default_theme_support );
+
+			$final_theme_support = $theme_support;
+
+			$feature = 'align-wide';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'automatic-feed-links';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'custom-background';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				$support = $final_theme_support[$feature];
+				if ( $support === true ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature );
+				}
+				else if ( $support === false ) {
+					\remove_theme_support( $feature );
+				}
+				else if ( is_array( $support ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $support );
+				}
+			}
+
+			$feature = 'custom-header';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				$support = $final_theme_support[$feature];
+				if ( $support === true ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature );
+				}
+				else if ( $support === false ) {
+					\remove_theme_support( $feature );
+				}
+				else if ( is_array( $support ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $support );
+				}
+			}
+
+			$feature = 'custom-logo';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				$support = $final_theme_support[$feature];
+				if ( $support === true ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature );
+				}
+				else if ( $support === false ) {
+					\remove_theme_support( $feature );
+				}
+				else if ( is_array( $support ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $support );
+				}
+			}
+
+			$feature = 'customize-selective-refresh-widgets';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'dark-editor-style';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'disable-custom-colors';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'disable-custom-font-sizes';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'editor-color-palette';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $final_theme_support[$feature] );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'editor-font-sizes';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $final_theme_support[$feature] );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'editor-styles';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'html5';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $final_theme_support[$feature] );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'menus';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\remove_theme_support( $feature );
+					\register_nav_menus( $final_theme_support[$feature] );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'post-formats';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				$support = $final_theme_support[$feature];
+				if ( $support === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $support === false ) {
+					\remove_theme_support( $feature );
+				}
+				else if ( is_array( $support ) ) {
+					\add_theme_support( $feature, $support );
+				}
+			}
+
+			$feature = 'post-thumbnails';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				$support = $final_theme_support[$feature];
+				if ( $support === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $support === false ) {
+					\remove_theme_support( $feature );
+				}
+				else if ( is_array( $support ) ) {
+					// Removing any previously set post type support in order to set the support,
+					// not just add additional post type support.
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $support );
+				}
+			}
+
+			$feature = 'responsive-embeds';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'starter-content';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\remove_theme_support( $feature );
+					\add_theme_support( $feature, $final_theme_support[$feature] );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'title-tag';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'wp-block-styles';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( $final_theme_support[$feature] === true ) {
+					\add_theme_support( $feature );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+
+			$feature = 'widgets';
+			if ( isset( $final_theme_support[$feature] ) ) {
+				if ( is_array( $final_theme_support[$feature] ) ) {
+					\add_action( 'widgets_init', function () use ( $feature, $final_theme_support ) {
+						\remove_theme_support( $feature );
+						foreach ( $final_theme_support[$feature] as $widget ) {
+							\register_sidebar($widget);
+						}
+					} );
+				}
+				else if ( $final_theme_support[$feature] === false ) {
+					\remove_theme_support( $feature );
+				}
+			}
+		}
+
 		// phpcs:disable Generic.Files.LineLength.MaxExceeded
 		/**
 		* Determines the response template candidates based on the request.
