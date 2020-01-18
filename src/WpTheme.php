@@ -597,14 +597,14 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 		*
 		*     // functions.php
 		*
-		*     use Wtf\Wp\v0\WpTheme;
+		*     use \Wpx\Wpx\v0\WpTheme;
 		*
 		*     add_action( 'wp', function () {
 		*     	WpTheme::skip_template_hierarchy();
 		*     } );
 		*
 		*     // Or more succinctly:
-		*     add_action( 'wp', 'Wtf\Wp\v0\WpTheme::skip_template_hierarchy' );
+		*     add_action( 'wp', 'Wpx\Wpx\v0\WpTheme::skip_template_hierarchy' );
 		*
 		* Note: The `wp_loaded` action can be used too but the WP_Query has not been run
 		* at that point.
