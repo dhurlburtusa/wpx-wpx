@@ -40,7 +40,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			}
 
 			$html = Html::attrs( $attrs );
-			$html = \apply_filters( 'wpx_wpx__the_body_attrs', $html );
+			$html = \apply_filters( 'wpx_wpx_0__the_body_attrs', $html );
 			return $html;
 		}
 
@@ -299,7 +299,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			}
 
 			$html = Html::attrs( $attrs );
-			$html = \apply_filters( 'wpx_wpx__the_html_attrs', $html );
+			$html = \apply_filters( 'wpx_wpx_0__the_html_attrs', $html );
 			return $html;
 		}
 
