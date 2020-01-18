@@ -30,10 +30,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\Html' ) ) {
 		*
 		*     <tag class="foo" checked>...</tag>
 		*
-		* Beware: Some attributes, `contenteditable`, is not a boolean attribute. It is
-		* an enumerated attribute. Therefore, its values must be strings even though
-		* `'true'` and `'false'` are among the accepted values. That is, using a PHP
-		* boolean is not correct for `contenteditable`.
+		* Beware: Some attributes, e.g., `contenteditable`, are not boolean attributes.
+		* They are an enumerated attribute. Therefore, its values must be strings even
+		* though `'true'` and `'false'` may be among the accepted values. That is, using a
+		* PHP boolean is not correct for `contenteditable`.
 		*
 		* Note: In order to keep the implementation simple, the logic is not aware of
 		* special attributes such as `contenteditable`. The logic is based off of the
