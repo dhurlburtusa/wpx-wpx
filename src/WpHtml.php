@@ -33,7 +33,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			if ( ! isset( $attrs['class'] ) ) {
 				$attrs['class'] = '';
 			}
-			$attrs['class'] = \get_body_class( $attrs['class'] );
+			$attrs['class'] = join( ' ', \get_body_class( $attrs['class'] ) );
 
 			if ( $attrs['class'] === '' ) {
 				$attrs['class'] = null;
