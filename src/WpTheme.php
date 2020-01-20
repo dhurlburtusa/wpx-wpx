@@ -4,6 +4,8 @@ namespace Wpx\Wpx\v0;
 
 require_once __DIR__ . '/bootstrap.php';
 
+use Wpx\Wpx\v0\WpHtml;
+
 if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 
 	class WpTheme {
@@ -289,28 +291,13 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 			add_action( 'after_setup_theme', function () use ( $config ) {
 				if ( \is_array( $config['styles'] ) ) {
 					foreach ( $config['styles'] as $style ) {
-						$handle = $style['handle'];
-						$src = $style['src'];
-						$deps = \is_array( $style['deps'] ) ? $style['deps'] : array();
-						$ver = isset( $style['ver'] ) ? $style['ver'] : false;
-						$media = isset( $style['media'] ) ? $style['media'] : 'all';
-						\wp_register_style( $handle, $src, $deps, $ver, $media );
+						WpHtml::register_style( $style );
 					}
 				}
 
 				if ( \is_array( $config['scripts'] ) ) {
 					foreach ( $config['scripts'] as $script ) {
-						$handle = $script['handle'];
-						$src = $script['src'];
-						$data = \is_array( $script['data'] ) ? $script['data'] : array();
-						$deps = \is_array( $script['deps'] ) ? $script['deps'] : array();
-						$in_head = isset( $script['in_head'] ) ? $script['in_head'] : false;
-						$ver = isset( $script['ver'] ) ? $script['ver'] : false;
-						\wp_register_script( $handle, $src, $deps, $ver, ! $in_head );
-
-						foreach ( $data as $key => $value ) {
-							\wp_script_add_data( $handle, $key, $value );
-						}
+						WpHtml::register_script( $script );
 					}
 				}
 

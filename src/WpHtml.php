@@ -321,6 +321,90 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		}
 
 		/**
+		* Registers the specified script.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: Only effective if `wp_head` is called. Almost all themes will call this
+		* function.
+		*
+		* Note: Using `in_footer` is only effective if `wp_footer` is called. Almost all
+		* themes will call this function.
+		*
+		* @param array $script {
+		* 	The script configuration.
+		*
+		* 	@type string $handle A unique name to be assigned to the script. This handle is
+		* 		used when enqueuing or dequeuing the script. It is also used to reference
+		* 		dependencies.
+		* 	@type string $src The URL to the script.
+		* 	@type string $conditional Optional. IE conditional comment condition(s). For
+		* 		example, `'lte IE 9'` will cause this script to be included if the browser is
+		* 		Internet Explorer version 9 or earlier.
+		* 	@type string[] $deps Optional. A set of registered script handles this script
+		* 		depends on. Defaults to an empty array.
+		* 	@type bool $in_footer Optional. Flag indicating whether to enqueue this script
+		* 		before `</body>` instead of in the `<head>`. Defaults to `true`.
+		* 	@type bool|string $ver Optional. A string specifying script version number, if it
+		* 		has one, which is added to the URL as a query string for cache busting purposes.
+		* 		If version is set to `false`, a version number is automatically added equal to
+		* 		current installed WordPress version. If `null`, no version is added. Defaults to
+		* 		`null`.
+		* }
+		*
+		* @see https://en.wikipedia.org/wiki/Conditional_comment
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function register_script ( $script ) {
+			$handle = $script['handle'];
+			$src = $script['src'];
+			$deps = \is_array( $script['deps'] ) ? $script['deps'] : array();
+			$in_footer = isset( $script['in_footer'] ) ? $script['in_footer'] : true;
+			$ver = isset( $script['ver'] ) ? $script['ver'] : null;
+			\wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+
+			if ( \is_string( $script['conditional'] ) ) {
+				\wp_script_add_data( $handle, 'conditional', $script['conditional'] );
+			}
+		}
+
+		/**
+		* Registers the specified style sheet.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: Only effective if `wp_head` is called. Almost all themes will call this
+		* function.
+		*
+		* @param array $style {
+		* 	The style sheet configuration.
+		*
+		* 	@type string $handle A unique name to be assigned to the style sheet. This handle
+		* 		is used when enqueuing or dequeuing the script. It is also used to reference
+		* 		dependencies.
+		* 	@type string $src The URL to the style sheet.
+		* 	@type string[] $deps Optional. A set of registered style handles this style sheet
+		* 		depends on. Defaults to an empty array.
+		* 	@type string $media The media query string determining when the styles in the
+		* 		style sheet should be applied. Defaults to `'all'`.
+		* 	@type bool|string $ver Optional. A string specifying style sheet version number,
+		* 		if it has one, which is added to the URL as a query string for cache busting
+		* 		purposes. If version is set to `false`, a version number is automatically added
+		* 		equal to current installed WordPress version. If `null`, no version is added.
+		* 		Defaults to `null`.
+		* }
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function register_style ( $style ) {
+			$handle = $style['handle'];
+			$src = $style['src'];
+			$deps = \is_array( $style['deps'] ) ? $style['deps'] : array();
+			$ver = isset( $style['ver'] ) ? $style['ver'] : null;
+			$media = isset( $style['media'] ) ? $style['media'] : 'all';
+			\wp_register_style( $handle, $src, $deps, $ver, $media );
+		}
+
+		/**
 		* Prevents WordPress from adding relational links for adjacent posts in the
 		* document head.
 		*
