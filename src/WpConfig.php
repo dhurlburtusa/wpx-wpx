@@ -79,6 +79,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     		'must_be_authenticated' => true,
 		*     	],
 		*     	'self_pinging' => false,
+		*     	'text_widget_shortcodes' => true,
 		*     	'texturization' => false,
 		*     	'trash' => 60,
 		*     	'wp_cron' => [
@@ -101,42 +102,44 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     ]);
 		*
 		* @param array $config {
-		*     The WP configuration.
+		* 	The WP configuration.
 		*
-		*     @type array|false $autop Optional. The WP "autop"ing configuration. See
-		*       `WpConfig::configure_autop` for details.
-		*     @type array|false $blog_feed Optional. The WP blog feed configuration. See
-		*       `WpConfig::configure_blog_feed` for details.
-		*     @type array|false $capital_p Optional. The WP capital P functionality configuration.
-		*       See `WpConfig::configure_capital_p` for details.
-		*     @type array|false $emojis Optional. The WP emojis configuration. See
-		*       `WpConfig::configure_emojis` for details.
-		*     @type array|false $heartbeat Optional. The WP heartbeat configuration. See
-		*       `WpConfig::configure_heartbeat` for details.
-		*     @type array|false $oembed_provider_support Optional. The WP oEmbed provider support
-		*       configuration. See `WpConfig::configure_oembed_provider_support` for details.
-		*     @type array|false $plugin_and_theme_editors Optional. The plugin and theme editors
-		*       configuration. See `WpConfig::configure_plugin_and_theme_editors` for details.
-		*     @type array $post_autosave Optional. The WP post autosave configuration. See
-		*       `WpConfig::configure_post_autosave` for details.
-		*     @type array $post_revisions Optional. The WP post revisions configuration. See
-		*       `WpConfig::configure_post_revisions` for details.
-		*     @type array $rest_api Optional. The WP REST API configuration. See
-		*       `WpConfig::configure_rest_api` for details.
-		*     @type array|false $self_pinging Optional. The self-pinging configuration. See
-		*       `WpConfig::configure_self_pinging` for details.
-		*     @type array|false $texturization Optional. The WP texturization configuration. See
-		*       `WpConfig::configure_texturization` for details.
-		*     @type array|int $trash Optional. The WP trash configuration. See
-		*       `WpConfig::configure_trash` for details.
-		*     @type array $wp_cron Optional. The WP Cron configuration. See
-		*       `WpConfig::configure_wp_cron` for details.
-		*     @type array $wp_db Optional. The WP DB configuration. See
-		*       `WpConfig::configure_wp_db` for details.
-		*     @type array $wp_http Optional. The WP HTTP configuration. See
-		*       `WpConfig::configure_wp_http` for details.
-		*     @type array $xmlrpc Optional. The XML-RPC configuration. See
-		*       `WpConfig::configure_xmlrpc` for details.
+		* 	@type array|false $autop Optional. The WP "autop"ing configuration. See
+		* 		`WpConfig::configure_autop` for details.
+		* 	@type array|false $blog_feed Optional. The WP blog feed configuration. See
+		* 		`WpConfig::configure_blog_feed` for details.
+		* 	@type array|false $capital_p Optional. The WP capital P functionality configuration.
+		* 		See `WpConfig::configure_capital_p` for details.
+		* 	@type array|false $emojis Optional. The WP emojis configuration. See
+		* 		`WpConfig::configure_emojis` for details.
+		* 	@type array|false $heartbeat Optional. The WP heartbeat configuration. See
+		* 		`WpConfig::configure_heartbeat` for details.
+		* 	@type array|false $oembed_provider_support Optional. The WP oEmbed provider support
+		* 		configuration. See `WpConfig::configure_oembed_provider_support` for details.
+		* 	@type array|false $plugin_and_theme_editors Optional. The plugin and theme editors
+		* 		configuration. See `WpConfig::configure_plugin_and_theme_editors` for details.
+		* 	@type array $post_autosave Optional. The WP post autosave configuration. See
+		* 		`WpConfig::configure_post_autosave` for details.
+		* 	@type array $post_revisions Optional. The WP post revisions configuration. See
+		* 		`WpConfig::configure_post_revisions` for details.
+		* 	@type array $rest_api Optional. The WP REST API configuration. See
+		* 		`WpConfig::configure_rest_api` for details.
+		* 	@type array|false $self_pinging Optional. The self-pinging configuration. See
+		* 		`WpConfig::configure_self_pinging` for details.
+		* 	@type bool $text_widget_shortcodes Optional. Flag indicating whether to allow
+		* 		processing of shortcodes in the WP text widgets. Defaults to `false`.
+		* 	@type array|false $texturization Optional. The WP texturization configuration. See
+		* 		`WpConfig::configure_texturization` for details.
+		* 	@type array|int $trash Optional. The WP trash configuration. See
+		* 		`WpConfig::configure_trash` for details.
+		* 	@type array $wp_cron Optional. The WP Cron configuration. See
+		* 		`WpConfig::configure_wp_cron` for details.
+		* 	@type array $wp_db Optional. The WP DB configuration. See
+		* 		`WpConfig::configure_wp_db` for details.
+		* 	@type array $wp_http Optional. The WP HTTP configuration. See
+		* 		`WpConfig::configure_wp_http` for details.
+		* 	@type array $xmlrpc Optional. The XML-RPC configuration. See
+		* 		`WpConfig::configure_xmlrpc` for details.
 		* }
 		*/
 		public static function configure ( $config = array() ) {
@@ -151,6 +154,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$post_revisions_config = isset( $config['post_revisions'] ) ? $config['post_revisions'] : null;
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
 			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
+			$text_widget_shortcodes = isset( $config['text_widget_shortcodes'] ) ? $config['text_widget_shortcodes'] : false;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
 			$trash_config = isset( $config['trash'] ) ? $config['trash'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
@@ -180,6 +184,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 
 			self::configure_self_pinging( $self_pinging_config );
 
+			if ( $text_widget_shortcodes === true ) {
+				self::enable_text_widget_shortcodes();
+			}
+
 			self::configure_texturization( $texturization_config );
 
 			self::configure_trash( $trash_config );
@@ -202,9 +210,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* This can be used to prevent WordPress from "autop"ing your site's content.
 		*
 		* @param array|false $config {
-		*     WP "autop"ing configuration.
+		* 	WP "autop"ing configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable WP "autop"ing.
+		* 	@type bool $disable Flag indicating whether to disable WP "autop"ing.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -230,9 +238,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* before `wp_head` is called.
 		*
 		* @param array|false $config {
-		*     WP blog feed configuration.
+		* 	WP blog feed configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable WP blog feed.
+		* 	@type bool $disable Flag indicating whether to disable WP blog feed.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -261,9 +269,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* "Wordpress".
 		*
 		* @param array|false $config {
-		*     WP capital P configuration.
+		* 	WP capital P configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable WP capital P functionality.
+		* 	@type bool $disable Flag indicating whether to disable WP capital P functionality.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -291,9 +299,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* before `wp_head` is called.
 		*
 		* @param array|false $config {
-		*     WP emojis configuration.
+		* 	WP emojis configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable WP emojis.
+		* 	@type bool $disable Flag indicating whether to disable WP emojis.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -330,15 +338,15 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     ] );
 		*
 		* @param array|false $config {
-		*     WP heartbeat configuration.
+		* 	WP heartbeat configuration.
 		*
-		*     @type bool $disable A flag indicating whether to completely disable the WP
-		*     	heartbeat. If true, then all other configs are ignored.
-		*     @type bool $allow_suspension A flag indicating whether the heartbeat may be
-		*     	suspended. Defaults to false.
-		*     @type int $interval The number of seconds the interval should be.
-		*     @type int $minimalInterval The minimum number of seconds an interval may be.
-		*     	Must be greater than or equal to 0 or less than or equal to 600.
+		* 	@type bool $disable A flag indicating whether to completely disable the WP
+		* 		heartbeat. If true, then all other configs are ignored.
+		* 	@type bool $allow_suspension A flag indicating whether the heartbeat may be
+		* 		suspended. Defaults to false.
+		* 	@type int $interval The number of seconds the interval should be.
+		* 	@type int $minimalInterval The minimum number of seconds an interval may be.
+		* 		Must be greater than or equal to 0 or less than or equal to 600.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -393,9 +401,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @see https://make.wordpress.org/core/2015/10/28/new-embeds-feature-in-wordpress-4-4/
 		*
 		* @param array|false $config {
-		*     WP oEmbed provider support configuration.
+		* 	WP oEmbed provider support configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable WP oEmbed provider support.
+		* 	@type bool $disable Flag indicating whether to disable WP oEmbed provider support.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -484,10 +492,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Allows preventing access to the plugin and theme editors in the WP admin.
 		*
 		* @param array|false $config {
-		*     Plugin and theme editors configuration.
+		* 	Plugin and theme editors configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable the plugin and theme
-		*       editors.
+		* 	@type bool $disable Flag indicating whether to disable the plugin and theme
+		* 		editors.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -539,10 +547,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @see https://www.wpbeginner.com/glossary/autosave/
 		*
 		* @param array $config {
-		*     Post autosave configuration.
+		* 	Post autosave configuration.
 		*
-		*     @type int $interval Optional. The number of seconds between autosaves. Must
-		*     	be an integer greater than or equal to 0. Defaults to the WP default which is 60.
+		* 	@type int $interval Optional. The number of seconds between autosaves. Must
+		* 		be an integer greater than or equal to 0. Defaults to the WP default which is 60.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -606,18 +614,18 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* @see https://www.wpbeginner.com/glossary/revisions/
 		*
 		* @param array $config {
-		*     Post revisions configuration.
+		* 	Post revisions configuration.
 		*
-		*     @type bool|callable|int $maximum Optional. The minimum number of revisions
-		*     	to keep for a post. Must be an integer greater than or equal to 0, a boolean, or
-		*     	a callable. False means don't keep any revisions. It is equivalent to 0. True
-		*     	means keep all revisions which is the default. A callable will receive two
-		*     	arguments -- first argument is the current revision value from previously run
-		*     	filters or what the `WP_POST_REVISIONS` is set to; second argument is the post
-		*     	being autosaved.
-		*     @type int $wp_revisions_to_keep_priority Optional. The priority to use with the
-		*     	`wp_revisions_to_keep` filter. Defaults to 100. Only applicable when
-		*     	`maximum` is set.
+		* 	@type bool|callable|int $maximum Optional. The minimum number of revisions
+		* 		to keep for a post. Must be an integer greater than or equal to 0, a boolean, or
+		* 		a callable. False means don't keep any revisions. It is equivalent to 0. True
+		* 		means keep all revisions which is the default. A callable will receive two
+		* 		arguments -- first argument is the current revision value from previously run
+		* 		filters or what the `WP_POST_REVISIONS` is set to; second argument is the post
+		* 		being autosaved.
+		* 	@type int $wp_revisions_to_keep_priority Optional. The priority to use with the
+		* 		`wp_revisions_to_keep` filter. Defaults to 100. Only applicable when
+		* 		`maximum` is set.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -678,17 +686,17 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Note: Since WordPress version 4.7.0, the REST API cannot be completely disabled.
 		*
 		* @param array $config {
-		*     Post revisions configuration.
+		* 	Post revisions configuration.
 		*
-		*     @type bool $html_link Optional. When false, the HTML `link` tag with the REST API
-		*     	URL will be left out of the response. Defaults to true.
-		*     @type bool $link_header Optional. When false, the `Link` response header with the
-		*     	REST API URL will be left out. Defaults to true.
-		*     @type bool $must_be_authenticated Optional. When true, requires the user to be
-		*     	authenticated to use the REST API. Defaults to false.
-		*     @type bool $rsd Optional. When false, the REST API URL will be left out of the RSD
-		*     	response.
-		*     @type string $url_prefix Optional. The URL prefix. Defaults to `wp-json`.
+		* 	@type bool $html_link Optional. When false, the HTML `link` tag with the REST API
+		* 		URL will be left out of the response. Defaults to true.
+		* 	@type bool $link_header Optional. When false, the `Link` response header with the
+		* 		REST API URL will be left out. Defaults to true.
+		* 	@type bool $must_be_authenticated Optional. When true, requires the user to be
+		* 		authenticated to use the REST API. Defaults to false.
+		* 	@type bool $rsd Optional. When false, the REST API URL will be left out of the RSD
+		* 		response.
+		* 	@type string $url_prefix Optional. The URL prefix. Defaults to `wp-json`.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -799,10 +807,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		// * Note: Not applicable when XMLRPC is disabled.
 		// *
 		// * @param array $config {
-		// *     RSD configuration.
+		// * 	RSD configuration.
 		// *
-		// *     @type bool $rest_api Optional. When false, the REST API will be left out of
-		// *       the RSD response. Defaults to true.
+		// * 	@type bool $rest_api Optional. When false, the REST API will be left out of
+		// * 		the RSD response. Defaults to true.
 		// * }
 		// */
 		// public static function configure_rsd ( $config = array() ) {
@@ -823,9 +831,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* Allows disabling the ability of the site from pinging itself.
 		*
 		* @param array|false $config {
-		*     Self pinging configuration.
+		* 	Self pinging configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable self pinging.
+		* 	@type bool $disable Flag indicating whether to disable self pinging.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -887,10 +895,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* plugin.
 		*
 		* @param array|false $config {
-		*     WP texturization configuration.
+		* 	WP texturization configuration.
 		*
-		*     @type bool|'completely' $disable Flag indicating whether to disable the WP
-		*       texturization functionality.
+		* 	@type bool|'completely' $disable Flag indicating whether to disable the WP
+		* 		texturization functionality.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -947,10 +955,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* default to the WP default of 30 days.
 		*
 		* @param array|int $config {
-		*     WP trash configuration.
+		* 	WP trash configuration.
 		*
-		*     @type int $max_age The number of days to keep trashed posts and comments around
-		*       before they are automatically deleted.
+		* 	@type int $max_age The number of days to keep trashed posts and comments around
+		* 		before they are automatically deleted.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -1005,20 +1013,20 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* `wp-content/debug.log`.
 		*
 		* @param array $config {
-		*     WP-Cron configuration.
+		* 	WP-Cron configuration.
 		*
-		*     @type bool|string $disable Allows disabling of WP-Cron. Set to true to disable
-		*     	WP-Cron from working in normal requests. However, this will not disable WP-Cron
-		*     	for the WP-Cron request (`wp-cron.php?doing_wp_cron`). To also disable that,
-		*     	set to `'completely'`.
-		*     @type bool|string $auto Controls how the automatic running of WP-Cron is handled
-		*     	during the request. It can be disabled by setting this to `'disable'`. It can be
-		*     	postponed until the end of the request after the theme has generated and sent its
-		*     	content by setting this to `'postpone'`.
-		*     @type int $lock_timeout The number of seconds for the lock timeout. Defaults to
-		*     	the WordPress default of 60.
-		*     @type bool $log_execution Flag indicating whether to log the execution of the
-		*     	pending WP-Cron tasks.
+		* 	@type bool|string $disable Allows disabling of WP-Cron. Set to true to disable
+		* 		WP-Cron from working in normal requests. However, this will not disable WP-Cron
+		* 		for the WP-Cron request (`wp-cron.php?doing_wp_cron`). To also disable that,
+		* 		set to `'completely'`.
+		* 	@type bool|string $auto Controls how the automatic running of WP-Cron is handled
+		* 		during the request. It can be disabled by setting this to `'disable'`. It can be
+		* 		postponed until the end of the request after the theme has generated and sent its
+		* 		content by setting this to `'postpone'`.
+		* 	@type int $lock_timeout The number of seconds for the lock timeout. Defaults to
+		* 		the WordPress default of 60.
+		* 	@type bool $log_execution Flag indicating whether to log the execution of the
+		* 		pending WP-Cron tasks.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -1117,10 +1125,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* `wp-content/debug.log`.
 		*
 		* @param array $config {
-		*     WP-DB configuration.
+		* 	WP-DB configuration.
 		*
-		*     @type bool $log_queries Flag indicating whether to log the database queries that
-		*     	were executed during the request.
+		* 	@type bool $log_queries Flag indicating whether to log the database queries that
+		* 		were executed during the request.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -1167,19 +1175,19 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     ] );
 		*
 		* @param array $config {
-		*     WP HTTP configuration.
+		* 	WP HTTP configuration.
 		*
-		*     @type array $access {
-		*         Access configuration.
+		* 	@type array $access {
+		* 		Access configuration.
 		*
-		*         @type bool $external Optional. Flag indicating whether to allow external access.
-		*           Defaults to true.
-		*         @type bool $local Optional. Flag indicating whether to allow local access.
-		*           Defaults to true.
-		*         @type array $allow Optional. List of hostnames to allow access. Only applicable
-		*           when `$external` is false. It is recommended to include `'api.wordpress.org'`
-		*           otherwise updates and downloading plugins or themes won't work.
-		*     }
+		* 		@type bool $external Optional. Flag indicating whether to allow external access.
+		* 			Defaults to true.
+		* 		@type bool $local Optional. Flag indicating whether to allow local access.
+		* 			Defaults to true.
+		* 		@type array $allow Optional. List of hostnames to allow access. Only applicable
+		* 			when `$external` is false. It is recommended to include `'api.wordpress.org'`
+		* 			otherwise updates and downloading plugins or themes won't work.
+		* 	}
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -1244,13 +1252,13 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		* must-use (MU) plugin.
 		*
 		* @param array|false $config {
-		*     XML-RPC configuration.
+		* 	XML-RPC configuration.
 		*
-		*     @type bool $disable Flag indicating whether to disable XML-RPC. When true,
-		*     	not only will the XML-RPC be disabled but other related content will be
-		*     	disabled. For example, the RSD `link` tag will no longer be included in
-		*     	any of the HTML responses since it would just be referring to something
-		*     	that is unavailable.
+		* 	@type bool $disable Flag indicating whether to disable XML-RPC. When true,
+		* 		not only will the XML-RPC be disabled but other related content will be
+		* 		disabled. For example, the RSD `link` tag will no longer be included in
+		* 		any of the HTML responses since it would just be referring to something
+		* 		that is unavailable.
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -1266,6 +1274,16 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// 	return false;
 				// }, 100 );
 			}
+		}
+
+		/**
+		* Enables shortcodes in the text widget.
+		*
+		* By default, the WP text widget does not recognize shortcodes.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function enable_text_widget_shortcodes () {
+			\add_filter( 'widget_text', 'do_shortcode' );
 		}
 
 	} // eo class WpConfig

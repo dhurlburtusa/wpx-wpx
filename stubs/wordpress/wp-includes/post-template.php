@@ -1,6 +1,9 @@
 <?php
 
 function get_body_class( $class = '' ) {
+	if ( ! \is_array( $class ) ) {
+		$class = array( $class );
+	}
 	return $class;
 }
 

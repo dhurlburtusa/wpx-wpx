@@ -19,6 +19,10 @@ final class WpThemeTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpTheme', 'add_theme_support' ) );
 	}
 
+	public function test_WpTheme_has_configure_method(): void {
+		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpTheme', 'configure' ) );
+	}
+
 	public function test_WpTheme_has_determine_template_candidates_method(): void {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpTheme', 'determine_template_candidates' ) );
 	}
