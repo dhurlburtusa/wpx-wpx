@@ -596,7 +596,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     		if ( $post->post_type === 'post' ) {
 		*     			$revisions = 30;
 		*     		}
-		*     		else if ( $post->post_type === 'page' ) {
+		*     		elseif ( $post->post_type === 'page' ) {
 		*     			$revisions = 10;
 		*     		}
 		*     		return $revisions;
@@ -1039,7 +1039,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 						_set_disable_wp_cron_to_true();
 						$was_disabled = true;
 					}
-					else if ( $disable === 'completely' ) {
+					elseif ( $disable === 'completely' ) {
 						if ( \defined( 'DOING_CRON' ) ) {
 							__404_and_die();
 							// add_filter( 'pre_get_ready_cron_jobs', array(), 100 );
@@ -1054,7 +1054,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 						if ( $auto === 'disable' ) {
 							\remove_action( 'init', 'wp_cron' );
 						}
-						else if ( $auto === 'postpone' ) {
+						elseif ( $auto === 'postpone' ) {
 							\remove_action( 'init', 'wp_cron' );
 							if ( ! \has_action( 'shutdown', 'wp_cron' ) ) {
 								// PHP complains about passing an argument to `flush` when using:

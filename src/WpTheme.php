@@ -24,7 +24,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -34,7 +34,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -46,10 +46,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature );
 				}
-				else if ( $support === false ) {
+				elseif ( $support === false ) {
 					\remove_theme_support( $feature );
 				}
-				else if ( is_array( $support ) ) {
+				elseif ( is_array( $support ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $support );
 				}
@@ -62,10 +62,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature );
 				}
-				else if ( $support === false ) {
+				elseif ( $support === false ) {
 					\remove_theme_support( $feature );
 				}
-				else if ( is_array( $support ) ) {
+				elseif ( is_array( $support ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $support );
 				}
@@ -78,10 +78,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature );
 				}
-				else if ( $support === false ) {
+				elseif ( $support === false ) {
 					\remove_theme_support( $feature );
 				}
-				else if ( is_array( $support ) ) {
+				elseif ( is_array( $support ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $support );
 				}
@@ -92,7 +92,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -102,7 +102,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -112,7 +112,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -122,7 +122,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -133,7 +133,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $final_theme_support[$feature] );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -144,7 +144,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $final_theme_support[$feature] );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -154,7 +154,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -165,7 +165,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $final_theme_support[$feature] );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -176,7 +176,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\register_nav_menus( $final_theme_support[$feature] );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -187,10 +187,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $support === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $support === false ) {
+				elseif ( $support === false ) {
 					\remove_theme_support( $feature );
 				}
-				else if ( is_array( $support ) ) {
+				elseif ( is_array( $support ) ) {
 					\add_theme_support( $feature, $support );
 				}
 			}
@@ -201,10 +201,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $support === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $support === false ) {
+				elseif ( $support === false ) {
 					\remove_theme_support( $feature );
 				}
-				else if ( is_array( $support ) ) {
+				elseif ( is_array( $support ) ) {
 					// Removing any previously set post type support in order to set the support,
 					// not just add additional post type support.
 					\remove_theme_support( $feature );
@@ -217,7 +217,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -228,7 +228,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 					\add_theme_support( $feature, $final_theme_support[$feature] );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -238,7 +238,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -248,7 +248,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 				if ( $final_theme_support[$feature] === true ) {
 					\add_theme_support( $feature );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -263,7 +263,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						}
 					} );
 				}
-				else if ( $final_theme_support[$feature] === false ) {
+				elseif ( $final_theme_support[$feature] === false ) {
 					\remove_theme_support( $feature );
 				}
 			}
@@ -317,7 +317,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -327,7 +327,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -339,10 +339,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature );
 						}
-						else if ( $support === false ) {
+						elseif ( $support === false ) {
 							\remove_theme_support( $feature );
 						}
-						else if ( is_array( $support ) ) {
+						elseif ( is_array( $support ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $support );
 						}
@@ -355,10 +355,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature );
 						}
-						else if ( $support === false ) {
+						elseif ( $support === false ) {
 							\remove_theme_support( $feature );
 						}
-						else if ( is_array( $support ) ) {
+						elseif ( is_array( $support ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $support );
 						}
@@ -371,10 +371,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature );
 						}
-						else if ( $support === false ) {
+						elseif ( $support === false ) {
 							\remove_theme_support( $feature );
 						}
-						else if ( is_array( $support ) ) {
+						elseif ( is_array( $support ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $support );
 						}
@@ -385,7 +385,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -395,7 +395,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -405,7 +405,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -415,7 +415,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -426,7 +426,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $theme_supports[$feature] );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -437,7 +437,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $theme_supports[$feature] );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -447,7 +447,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -458,7 +458,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $theme_supports[$feature] );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -469,7 +469,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\register_nav_menus( $theme_supports[$feature] );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -480,10 +480,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $support === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $support === false ) {
+						elseif ( $support === false ) {
 							\remove_theme_support( $feature );
 						}
-						else if ( is_array( $support ) ) {
+						elseif ( is_array( $support ) ) {
 							\add_theme_support( $feature, $support );
 						}
 					}
@@ -494,10 +494,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $support === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $support === false ) {
+						elseif ( $support === false ) {
 							\remove_theme_support( $feature );
 						}
-						else if ( is_array( $support ) ) {
+						elseif ( is_array( $support ) ) {
 							// Removing any previously set post type support in order to set the support,
 							// not just add additional post type support.
 							\remove_theme_support( $feature );
@@ -510,7 +510,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -521,7 +521,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 							\remove_theme_support( $feature );
 							\add_theme_support( $feature, $theme_supports[$feature] );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -531,7 +531,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -541,7 +541,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 						if ( $theme_supports[$feature] === true ) {
 							\add_theme_support( $feature );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -556,7 +556,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 								}
 							} );
 						}
-						else if ( $theme_supports[$feature] === false ) {
+						elseif ( $theme_supports[$feature] === false ) {
 							\remove_theme_support( $feature );
 						}
 					}
@@ -714,7 +714,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 
 					return $template_candidates;
 				}
-				else if ( \is_archive() ) {
+				elseif ( \is_archive() ) {
 					$is_post_type_archive = \is_post_type_archive();
 					$post_type = null;
 
