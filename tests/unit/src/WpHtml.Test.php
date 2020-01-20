@@ -55,10 +55,6 @@ final class WpHtmlTest extends TestCase {
 		$this->assertEquals( ' class="foo" contenteditable="true" lang="de-de"', $actual_html );
 	}
 
-	public function test_WpHtml_has_configure_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'configure' ) );
-	}
-
 	public function test_WpHtml_has_dequeue_scripts_method(): void {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'dequeue_scripts' ) );
 	}
@@ -81,42 +77,6 @@ final class WpHtmlTest extends TestCase {
 
 	public function test_WpHtml_has_register_style_method(): void {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'register_style' ) );
-	}
-
-	public function test_WpHtml_has_remove_adjacent_posts_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'remove_adjacent_posts_link' ) );
-	}
-
-	public function test_WpHtml_has_remove_canonical_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'remove_canonical_link' ) );
-	}
-
-	public function test_WpHtml_has_remove_generator_meta_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'remove_generator_meta' ) );
-	}
-
-	public function test_WpHtml_has_remove_rsd_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'remove_rsd_link' ) );
-	}
-
-	public function test_WpHtml_has_remove_wlwmanifest_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'remove_wlwmanifest_link' ) );
-	}
-
-	public function test_WpHtml_has_set_meta_charset_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_meta_charset' ) );
-	}
-
-	public function test_WpHtml_has_set_meta_viewport_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_meta_viewport' ) );
-	}
-
-	public function test_WpHtml_has_set_pingback_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_pingback_link' ) );
-	}
-
-	public function test_WpHtml_has_set_profile_link_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_profile_link' ) );
 	}
 
 	public function test_WpHtml_html_attrs_with_empty_attrs_arg(): void {
