@@ -11,137 +11,6 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 	class WpHtmlHead {
 
 		/**
-		* Convenience function for configuring an HTML response.
-		*
-		* **Example Usage**
-		*
-		*     WpHtmlHead::configure([
-		*     	'adjacent_posts_link' => false,
-		*     	'canonical_link' => false,
-		*     	'generator_meta' => false,
-		*     	'meta_charset' => true,
-		*     	'meta_viewport' => true, // Set to default.
-		*     	// Or whatever you desire.
-		*     	'meta_viewport' => 'width=device-width, initial-scale=0.86, maximum-scale=3.0, minimum-scale=0.86',
-		*     	'profile_link' => 'http://gmpg.org/xfn/11',
-		*     //	'rest_link' => false,
-		*     //	'rsd_link' => false,
-		*     	'shortlink_link' => false,
-		*     	'wlwmanifest_link' => false,
-		*     ]);
-		*
-		* @param array $config {
-		* 	The WP HTML response configuration.
-		*
-		* 	@type false $adjacent_posts_link Optional. Flag indicating whether to include
-		* 		any adjacent post links when applicable.
-		* 	@type false $canonical_link Optional. Flag indicating whether to include
-		* 		any a canonical link when applicable.
-		* 	@type false|string $generator_meta Optional. Flag indicating whether to include
-		* 		the standard WordPress generator meta tag or to set the generator to a specific
-		* 		value. Defaults to false.
-		* 	@type true|string $meta_charset Optional. Set the meta charset value. Defaults
-		* 		to true which means use the value from the WordPress settings which defaults
-		* 		to UTF-8.
-		* 	@type true|string $meta_viewport Optional. Set the meta viewport value. Defaults
-		* 		to true which means use the default viewport settings. See
-		* 		`WpHtmlHead::set_meta_viewport` for more information.
-		* 	@type true|string $pingback_link Optional. Flag indicating whether to include
-		* 		the pingback link on the appropriate pages or the pingback URL to use.
-		* 	@type string $profile_link Optional. The URL to use for a profile link.
-		* 	@type false $rest_link Optional. Flag indicating whether to include a REST API
-		* 		link in the document head. Defaults to true.
-		* 	@type false $rsd_link Optional. Flag indicating whether to include an RSD link in
-		* 		the document head. Defaults to false.
-		* 	@type string[] $scripts Optional. Handles of pre-registered scripts. Defaults to
-		* 		null.
-		* 	@type string[] $styles Optional. Handles of pre-registered styles. Defaults to
-		* 		null.
-		* 	@type false $shortlink_link Optional. Flag indicating whether to include a short
-		* 		link in the document head. Defaults to false.
-		* 	@type false $wlwmanifest_link Optional. Flag indicating whether to include a
-		* 		Windows Live Writer (WLW) manifest link in the document head. Defaults to false.
-		* }
-		*/
-		public static function configure ( $config = array() ) {
-			$adjacent_posts_link_config = isset( $config['adjacent_posts_link'] ) ? $config['adjacent_posts_link'] : true;
-			$canonical_link_config = isset( $config['canonical_link'] ) ? $config['canonical_link'] : true;
-			$generator_meta_config = isset( $config['generator_meta'] ) ? $config['generator_meta'] : false;
-			$meta_charset_config = isset( $config['meta_charset'] ) ? $config['meta_charset'] : true;
-			$meta_viewport_config = isset( $config['meta_viewport'] ) ? $config['meta_viewport'] : true;
-			$pingback_link_config = isset( $config['pingback_link'] ) ? $config['pingback_link'] : false;
-			$profile_link_config = isset( $config['profile_link'] ) ? $config['profile_link'] : false;
-			// $rest_link_config = isset( $config['rest_link'] ) ? $config['rest_link'] : true;
-			// $rsd_link_config = isset( $config['rsd_link'] ) ? $config['rsd_link'] : false;
-			$shortlink_link_config = isset( $config['shortlink_link'] ) ? $config['shortlink_link'] : false;
-			$scripts_config = isset( $config['scripts'] ) ? $config['scripts'] : null;
-			$styles_config = isset( $config['styles'] ) ? $config['styles'] : null;
-			$wlwmanifest_link_config = isset( $config['wlwmanifest_link'] ) ? $config['wlwmanifest_link'] : false;
-
-			if ( $adjacent_posts_link_config === false ) {
-				self::remove_adjacent_posts_link();
-			}
-
-			if ( $canonical_link_config === false ) {
-				self::remove_canonical_link();
-			}
-
-			if ( $generator_meta_config === false ) {
-				self::remove_generator_meta();
-			}
-			else if ( \is_string( $generator_meta_config ) ) {
-				\remove_action( 'wp_head', 'wp_generator' );
-				\add_filter( 'the_generator', function () use ( $generator_meta_config ) {
-					return $generator_meta_config;
-				}, 100 );
-			}
-
-			self::set_meta_charset( $meta_charset_config );
-
-			if ( $meta_viewport_config === true ) {
-				self::set_meta_viewport();
-			}
-			else if ( \is_string( $meta_viewport_config ) ) {
-				self::set_meta_viewport( $meta_viewport_config );
-			}
-
-			if ( $pingback_link_config === true ) {
-				self::set_pingback_link();
-			}
-			else if ( \is_string( $pingback_link_config ) ) {
-				self::set_pingback_link( $pingback_link_config );
-			}
-
-			if ( \is_string( $profile_link_config ) ) {
-				self::set_profile_link( $profile_link_config );
-			}
-
-			// if ( $rest_link_config === false ) {
-			// 	self::remove_rest_link();
-			// }
-
-			// if ( $rsd_link_config === false ) {
-			// 	self::remove_rsd_link();
-			// }
-
-			if ( $shortlink_link_config === false ) {
-				self::remove_shortlink_link();
-			}
-
-			if ( \is_array( $styles_config ) ) {
-				WpHtml::enqueue_styles( $styles_config );
-			}
-
-			if ( \is_array( $scripts_config ) ) {
-				WpHtml::enqueue_scripts( $scripts_config );
-			}
-
-			if ( $wlwmanifest_link_config === false ) {
-				self::remove_wlwmanifest_link();
-			}
-		}
-
-		/**
 		* Prevents WordPress from adding relational links for adjacent posts in the
 		* document head.
 		*
@@ -187,6 +56,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function remove_generator_meta ( $priority = 100 ) {
 			\remove_action( 'wp_head', 'wp_generator' );
+			\remove_filter( 'the_generator', '__return_empty_string', $priority );
 			\add_filter( 'the_generator', '__return_empty_string', $priority );
 		}
 
@@ -253,21 +123,21 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		// 	\remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 		// }
 
-		/**
-		* Prevents WordPress from adding a Really Simple Discovery (RSD) link in the
-		* document head.
-		*
-		* Must be called before the theme calls `wp_head`.
-		*
-		* Note: This will still work if called at the beginning of a WP page template
-		* before `wp_head` is called.
-		*
-		* Note: This is automatically done when XML-RPC is disabled.
-		*/
-		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function remove_rsd_link () {
-			\remove_action( 'wp_head', 'rsd_link' );
-		}
+		// /**
+		// * Prevents WordPress from adding a Really Simple Discovery (RSD) link in the
+		// * document head.
+		// *
+		// * Must be called before the theme calls `wp_head`.
+		// *
+		// * Note: This will still work if called at the beginning of a WP page template
+		// * before `wp_head` is called.
+		// *
+		// * Note: This is automatically done when XML-RPC is disabled.
+		// */
+		// // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		// public static function remove_rsd_link () {
+		// 	\remove_action( 'wp_head', 'rsd_link' );
+		// }
 
 		/**
 		* Prevents WordPress from adding a shortlink link in the document head.
@@ -297,6 +167,117 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		}
 
 		/**
+		* Convenience function for setting various content of the HTML head.
+		*
+		* **Example Usage**
+		*
+		*     WpHtmlHead::set([
+		*     	'adjacent_posts_link' => false,
+		*     	'canonical_link' => false,
+		*     	'charset_meta' => true,
+		*     	'generator_meta' => false,
+		*     	'profile_link' => 'http://gmpg.org/xfn/11',
+		*     //	'rest_link' => false,
+		*     //	'rsd_link' => false,
+		*     	'shortlink_link' => false,
+		*     	'viewport_meta' => true, // Set to default.
+		*     	// Or whatever you desire.
+		*     	'viewport_meta' => 'width=device-width, initial-scale=0.86, maximum-scale=3.0, minimum-scale=0.86',
+		*     	'wlwmanifest_link' => false,
+		*     ]);
+		*
+		* @param array $values {
+		* 	The HTML head values.
+		*
+		* 	@type bool $adjacent_posts_link Optional. Flag indicating whether to include
+		* 		any adjacent post links when applicable.
+		* 	@type bool $canonical_link Optional. Flag indicating whether to include
+		* 		any a canonical link when applicable.
+		* 	@type bool|string $charset_meta Optional. Set the meta charset value. Use `true`
+		* 		to use the value from the WordPress settings which defaults to `'UTF-8'`. No
+		* 		default value.
+		* 	@type bool|string $generator_meta Optional. Flag indicating whether to include
+		* 		the standard WordPress generator meta tag or to set the generator to a specific
+		* 		value. Use `true` to use the default provided by WordPress.
+		* 	@type bool|string $pingback_link Optional. Flag indicating whether to include
+		* 		the pingback link on the appropriate pages or the pingback URL to use. Use
+		* 		`true` to use the saved pingback URL.
+		* 	@type string $profile_link Optional. The URL to use for a profile link. No default
+		* 		value.
+		* 	@type string[] $scripts Optional. Handles of pre-registered scripts to be
+		* 		enqueued. No scripts are dequeued.
+		* 	@type bool $shortlink_link Optional. Flag indicating whether to include a short
+		* 		link in the document head.
+		* 	@type string[] $styles Optional. Handles of pre-registered styles to be enqueued.
+		* 		No styles are dequeued.
+		* 	@type bool|string $viewport_meta Optional. Set the viewport meta value. No default
+		* 		value.
+		* 	@type bool $wlwmanifest_link Optional. Flag indicating whether to include a
+		* 		Windows Live Writer (WLW) manifest link in the document head.
+		* }
+		*/
+		public static function set ( $values = array() ) {
+			// * 	@type bool $rest_link Optional. Flag indicating whether to include a REST API
+			// * 		link in the document head.
+			// $rest_link_config = isset( $values['rest_link'] ) ? $values['rest_link'] : true;
+			// * 	@type false $rsd_link Optional. Flag indicating whether to include an RSD link in
+			// * 		the document head. Defaults to false.
+			// $rsd_link_config = isset( $values['rsd_link'] ) ? $values['rsd_link'] : false;
+
+			if ( isset( $values['adjacent_posts_link'] ) && $values['adjacent_posts_link'] === false ) {
+				self::remove_adjacent_posts_link();
+			}
+
+			if ( isset( $values['canonical_link'] ) && $values['canonical_link'] === false ) {
+				self::remove_canonical_link();
+			}
+
+			if ( isset( $values['charset_meta'] ) ) {
+				self::set_charset_meta( $values['charset_meta'] );
+			}
+
+			if ( isset( $values['generator_meta'] ) ) {
+				self::set_generator_meta( $values['generator_meta'] );
+			}
+
+			if ( isset( $values['pingback_link'] ) ) {
+				self::set_pingback_link( $values['pingback_link'] );
+			}
+
+			if ( isset( $values['profile_link'] ) ) {
+				self::set_profile_link( $values['profile_link'] );
+			}
+
+			// if ( $rest_link_config === false ) {
+			// 	self::remove_rest_link();
+			// }
+
+			// if ( $rsd_link_config === false ) {
+			// 	self::remove_rsd_link();
+			// }
+
+			if ( isset( $values['shortlink_link'] ) && $values['shortlink_link'] === false ) {
+				self::remove_shortlink_link();
+			}
+
+			if ( ! empty( $values['styles'] ) && \is_array( $values['styles'] ) ) {
+				WpHtml::enqueue_styles( $values['styles'] );
+			}
+
+			if ( ! empty( $values['scripts'] ) && \is_array( $values['scripts'] ) ) {
+				WpHtml::enqueue_scripts( $values['scripts'] );
+			}
+
+			if ( isset( $values['viewport_meta'] ) ) {
+				self::set_viewport_meta( $values['viewport_meta'] );
+			}
+
+			if ( isset( $values['wlwmanifest_link'] ) && $values['wlwmanifest_link'] === false ) {
+				self::remove_wlwmanifest_link();
+			}
+		}
+
+		/**
 		* Sets the charset meta tag to the specified (or default) value.
 		*
 		* Must be called before the theme calls `wp_head`.
@@ -304,26 +285,37 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		* Note: Only effective if `wp_head` is called. Almost all themes will call this
 		* function.
 		*
-		* @param string $charset Optional. The value to set the charset meta to. Defaults
+		* @param bool|string $charset Optional. The value to set the charset meta to. Defaults
 		* 	to the site's `blog_charset` setting. This setting may be available in the WP
 		* 	admin under Settings > Reading. This setting only shows up if it is not set to
 		* 	`UTF-8`.
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function set_meta_charset ( $charset = true ) {
-			// Get the default if NULL.
+		public static function set_charset_meta ( $charset = true ) {
+			static $action;
+			$action_name = 'wp_head';
+			$priority = 0;
+
+			if ( $action ) {
+				\remove_action( $action_name, $action, $priority );
+			}
+
+			// Get the default if true.
 			if ( $charset === true ) {
 				$charset = \get_bloginfo( 'charset' );
 			}
+
+			$action = function () use ( $charset ) {
+				echo '<meta charset="' . \esc_attr( $charset ) . '">' . "\n";
+			};
+
 			/*
 			* It is recommended that the charset meta tag is one of the first two tags in the
 			* HTML head. Hence the reason for a priority of 0.
 			*
 			* See https://htmlhead.dev/.
 			*/
-			\add_action( 'wp_head', function () use ( $charset ) {
-				echo '<meta charset="' . \esc_attr( $charset ) . '">' . "\n";
-			}, 0 );
+			\add_action( $action_name, $action, $priority );
 		}
 
 		/**
@@ -335,20 +327,34 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		* function.
 		*
 		* @param string $viewport Optional. The value to set the viewport meta to.
-		* 	Defaults to `'width=device-width, initial-scale=1'` which is that standard
+		* 	Defaults to `'width=device-width, initial-scale=1'` which is the standard
 		* 	for a responsive web site.
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function set_meta_viewport ( $viewport = 'width=device-width, initial-scale=1' ) {
-			/*
-			* It is recommended that the viewport meta tag is one of the first two tags in the
-			* HTML head. Hence the reason for a priority of 0.
-			*
-			* See https://htmlhead.dev/.
-			*/
-			\add_action( 'wp_head', function () use ( $viewport ) {
-				echo '<meta name="viewport" content="' . \esc_attr( $viewport ) . '">' . "\n";
-			}, 0 );
+		public static function set_generator_meta ( $generator = false ) {
+			static $filter;
+			$filter_name = 'the_generator';
+			$priority = 100;
+
+			if ( $filter ) {
+				\remove_filter( $filter_name, $filter, $priority );
+			}
+
+			if ( $generator === false || $generator === null ) {
+				$generator = '';
+			}
+
+			if ( \is_string( $generator ) ) {
+				\remove_action( 'wp_head', 'wp_generator' );
+				$filter = function () use ( $generator ) {
+					return $generator;
+				};
+				\add_filter( $filter_name, $filter, $priority );
+			}
+			elseif ( $generator === true ) {
+				\remove_action( 'wp_head', 'wp_generator' );
+				\add_action( 'wp_head', 'wp_generator' );
+			}
 		}
 
 		/**
@@ -359,19 +365,31 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		* Note: Only effective if `wp_head` is called. Almost all themes will call this
 		* function.
 		*
-		* @param string $pingback_url Optional. The pingback URL. Use `null` to use the
+		* @param bool|string $pingback_url Optional. The pingback URL. Use `true` to use the
 		* 	saved pingback URL.
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function set_pingback_link ( $pingback_url = null ) {
-			\add_action( 'wp_head', function () use ( $pingback_url ) {
-				if ( \is_singular() && \pings_open( \get_queried_object() ) ) {
-					if ( $pingback_url === null ) {
-						$pingback_url = get_bloginfo( 'pingback_url' );
+		public static function set_pingback_link ( $pingback_url = true ) {
+			static $action;
+			$action_name = 'wp_head';
+			$priority = 3;
+
+			if ( $action ) {
+				\remove_action( $action_name, $action, $priority );
+			}
+
+			if ( $pingback_url === true || ( \is_string( $pingback_url ) && ! empty( $pingback_url ) ) ) {
+				$action = function () use ( $pingback_url ) {
+					if ( \is_singular() && \pings_open( \get_queried_object() ) ) {
+						if ( $pingback_url === true ) {
+							$pingback_url = get_bloginfo( 'pingback_url' );
+						}
+						echo '<link rel="pingback" href="' . \esc_url( $pingback_url ) . '">' . "\n";
 					}
-					echo '<link rel="pingback" href="' . \esc_url( $pingback_url ) . '">' . "\n";
-				}
-			}, 3 );
+				};
+
+				\add_action( $action_name, $action, $priority );
+			}
 		}
 
 		/**
@@ -385,10 +403,63 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 		* @param string $profile_url Optional. The profile URL.
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function set_profile_link ( $profile_url ) {
-			\add_action( 'wp_head', function () use ( $profile_url ) {
-				echo '<link rel="profile" href="' . \esc_url( $profile_url ) . '">' . "\n";
-			}, 3 );
+		public static function set_profile_link ( $profile_url = null ) {
+			static $action;
+			$action_name = 'wp_head';
+			$priority = 3;
+
+			if ( $action ) {
+				\remove_action( $action_name, $action, $priority );
+			}
+
+			if ( \is_string( $profile_url ) && ! empty( $profile_url ) ) {
+				$action = function () use ( $profile_url ) {
+					echo '<link rel="profile" href="' . \esc_url( $profile_url ) . '">' . "\n";
+				};
+
+				\add_action( $action_name, $action, $priority );
+			}
+		}
+
+		/**
+		* Sets the viewport meta tag to the specified (or default) value.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: Only effective if `wp_head` is called. Almost all themes will call this
+		* function.
+		*
+		* @param string $viewport Optional. The value to set the viewport meta to.
+		* 	Defaults to `'width=device-width, initial-scale=1'` which is the standard
+		* 	for a responsive web site.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function set_viewport_meta ( $viewport = true ) {
+			static $action;
+			$action_name = 'wp_head';
+			/*
+			* It is recommended that the viewport meta tag is one of the first two tags in the
+			* HTML head. Hence the reason for a priority of 0.
+			*
+			* See https://htmlhead.dev/.
+			*/
+			$priority = 0;
+
+			if ( $action ) {
+				\remove_action( $action_name, $action, $priority );
+			}
+
+			if ( $viewport === true ) {
+				$viewport = 'width=device-width, initial-scale=1';
+			}
+
+			if ( \is_string( $viewport ) && ! empty( $viewport ) ) {
+				$action = function () use ( $viewport ) {
+					echo '<meta name="viewport" content="' . \esc_attr( $viewport ) . '">' . "\n";
+				};
+
+				\add_action( $action_name, $action, $priority );
+			}
 		}
 
 	} // eo class WpHtmlHead
