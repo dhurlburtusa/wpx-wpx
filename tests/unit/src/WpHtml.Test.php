@@ -107,6 +107,10 @@ final class WpHtmlTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_meta_viewport' ) );
 	}
 
+	public function test_WpHtml_has_set_profile_link_method(): void {
+		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_profile_link' ) );
+	}
+
 	public function test_WpHtml_html_attrs_with_empty_attrs_arg(): void {
 		$attrs = [];
 		$actual_html = WpHtml::html_attrs( $attrs );
