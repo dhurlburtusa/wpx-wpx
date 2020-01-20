@@ -107,6 +107,10 @@ final class WpHtmlTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_meta_viewport' ) );
 	}
 
+	public function test_WpHtml_has_set_pingback_link_method(): void {
+		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_pingback_link' ) );
+	}
+
 	public function test_WpHtml_has_set_profile_link_method(): void {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'set_profile_link' ) );
 	}

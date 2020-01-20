@@ -4,6 +4,7 @@ require_once __DIR__ . '/wp-load.php';
 require_once __DIR__ . '/wp-includes/class-wp-error.php';
 require_once __DIR__ . '/wp-includes/class-wp-post-type.php';
 require_once __DIR__ . '/wp-includes/class-wp-user.php';
+require_once __DIR__ . '/wp-includes/comment-template.php';
 require_once __DIR__ . '/wp-includes/cron.php';
 require_once __DIR__ . '/wp-includes/default-constants.php';
 require_once __DIR__ . '/wp-includes/formatting.php';

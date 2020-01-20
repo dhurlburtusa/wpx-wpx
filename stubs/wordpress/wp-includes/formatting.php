@@ -133,3 +133,7 @@ function esc_attr( $text ) {
 	 */
 	return apply_filters( 'attribute_escape', $safe_text, $text );
 }
+
+function esc_url( $url, $protocols = null, $_context = 'display' ) {
+	return $url;
+}

@@ -80,6 +80,8 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*     @type true|string $meta_viewport Optional. Set the meta viewport value. Defaults
 		*     	to true which means use the default viewport settings. See
 		*     	`WpHtml::set_meta_viewport` for more information.
+		*     @type true|string $pingback_link Optional. Flag indicating whether to include
+		*     	the pingback link on the appropriate pages or the pingback URL to use.
 		*     @type string $profile_link Optional. The URL to use for a profile link.
 		*     @type false $rest_link Optional. Flag indicating whether to include a REST API
 		*     	link in the document head. Defaults to true.
@@ -101,6 +103,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			$generator_meta_config = isset( $config['generator_meta'] ) ? $config['generator_meta'] : false;
 			$meta_charset_config = isset( $config['meta_charset'] ) ? $config['meta_charset'] : true;
 			$meta_viewport_config = isset( $config['meta_viewport'] ) ? $config['meta_viewport'] : true;
+			$pingback_link_config = isset( $config['pingback_link'] ) ? $config['pingback_link'] : false;
 			$profile_link_config = isset( $config['profile_link'] ) ? $config['profile_link'] : false;
 			// $rest_link_config = isset( $config['rest_link'] ) ? $config['rest_link'] : true;
 			// $rsd_link_config = isset( $config['rsd_link'] ) ? $config['rsd_link'] : false;
@@ -134,6 +137,13 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			}
 			else if ( \is_string( $meta_viewport_config ) ) {
 				self::set_meta_viewport( $meta_viewport_config );
+			}
+
+			if ( $pingback_link_config === true ) {
+				self::set_pingback_link();
+			}
+			else if ( \is_string( $pingback_link_config ) ) {
+				self::set_pingback_link( $pingback_link_config );
 			}
 
 			if ( \is_string( $profile_link_config ) ) {
@@ -518,6 +528,29 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 			\add_action( 'wp_head', function () use ( $viewport ) {
 				echo '<meta name="viewport" content="' . \esc_attr( $viewport ) . '">' . "\n";
 			}, 0 );
+		}
+
+		/**
+		* Sets the pingback link to the specified value.
+		*
+		* Must be called before the theme calls `wp_head`.
+		*
+		* Note: Only effective if `wp_head` is called. Almost all themes will call this
+		* function.
+		*
+		* @param string $pingback_url Optional. The pingback URL. Use `null` to use the
+		* 	saved pingback URL.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function set_pingback_link ( $pingback_url = null ) {
+			\add_action( 'wp_head', function () use ( $pingback_url ) {
+				if ( \is_singular() && \pings_open( \get_queried_object() ) ) {
+					if ( $pingback_url === null ) {
+						$pingback_url = get_bloginfo( 'pingback_url' );
+					}
+					echo '<link rel="pingback" href="' . \esc_url( $pingback_url ) . '">' . "\n";
+				}
+			}, 3 );
 		}
 
 		/**
