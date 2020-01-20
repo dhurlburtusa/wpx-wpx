@@ -11,23 +11,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 		/**
 		* Sets up theme support.
 		*
-		* Use the `wtf_wp__theme_support` filter to adjust the default theme support
-		* configuration.
-		*
 		* // TODO: Document parameter.
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function add_theme_support ( $theme_support ) {
-			// $default_theme_support = self::get_default_theme_support();
-			// /**
-			// * Filters the default theme support. This is how themes get to change the theme
-			// * support configuration.
-			// *
-			// * @param array $default_theme_support The default theme support as an associative
-			// *   array.
-			// */
-			// $final_theme_support = apply_filters( 'wtf_wp__theme_support', $default_theme_support );
-
 			$final_theme_support = $theme_support;
 
 			$feature = 'align-wide';
@@ -278,6 +265,289 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpTheme' ) ) {
 					\remove_theme_support( $feature );
 				}
 			}
+		}
+
+		/**
+		* Sets up theme defaults and registers support for various WordPress features.
+		*
+		* Note that this function is hooked into the after_setup_theme hook, which
+		* runs before the init hook. The init hook is too late for some features, such
+		* as indicating support for post thumbnails.
+		*
+		* @see https://codex.wordpress.org/Theme_Features
+		*
+		* // TODO: Document parameter.
+		*/
+		public static function configure ( $config = array() ) {
+
+			// $content_width = $config['content_width'];
+			// $GLOBALS['content_width'] = apply_filters( 'wpx_wpx_v0__content_width', $content_width );
+
+			// $editor_style = $config['editor_style'];
+
+
+			add_action( 'after_setup_theme', function () use ( $config ) {
+				if ( \is_array( $config['textdomain'] ) && isset( $config['textdomain']['domain'] ) ) {
+					$textdomain_path = false;
+					if ( isset( $config['textdomain']['path'] ) ) {
+						$textdomain_path = $config['textdomain']['path'];
+					}
+					\load_theme_textdomain( $config['textdomain']['domain'], $textdomain_path );
+				}
+
+				if ( \is_array( $config['supports'] ) ) {
+					$theme_supports = $config['supports'];
+
+					$feature = 'align-wide';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'automatic-feed-links';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'custom-background';
+					if ( isset( $theme_supports[$feature] ) ) {
+						$support = $theme_supports[$feature];
+						if ( $support === true ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature );
+						}
+						else if ( $support === false ) {
+							\remove_theme_support( $feature );
+						}
+						else if ( is_array( $support ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $support );
+						}
+					}
+
+					$feature = 'custom-header';
+					if ( isset( $theme_supports[$feature] ) ) {
+						$support = $theme_supports[$feature];
+						if ( $support === true ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature );
+						}
+						else if ( $support === false ) {
+							\remove_theme_support( $feature );
+						}
+						else if ( is_array( $support ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $support );
+						}
+					}
+
+					$feature = 'custom-logo';
+					if ( isset( $theme_supports[$feature] ) ) {
+						$support = $theme_supports[$feature];
+						if ( $support === true ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature );
+						}
+						else if ( $support === false ) {
+							\remove_theme_support( $feature );
+						}
+						else if ( is_array( $support ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $support );
+						}
+					}
+
+					$feature = 'customize-selective-refresh-widgets';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'dark-editor-style';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'disable-custom-colors';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'disable-custom-font-sizes';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'editor-color-palette';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $theme_supports[$feature] );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'editor-font-sizes';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $theme_supports[$feature] );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'editor-styles';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'html5';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $theme_supports[$feature] );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'menus';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\remove_theme_support( $feature );
+							\register_nav_menus( $theme_supports[$feature] );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'post-formats';
+					if ( isset( $theme_supports[$feature] ) ) {
+						$support = $theme_supports[$feature];
+						if ( $support === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $support === false ) {
+							\remove_theme_support( $feature );
+						}
+						else if ( is_array( $support ) ) {
+							\add_theme_support( $feature, $support );
+						}
+					}
+
+					$feature = 'post-thumbnails';
+					if ( isset( $theme_supports[$feature] ) ) {
+						$support = $theme_supports[$feature];
+						if ( $support === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $support === false ) {
+							\remove_theme_support( $feature );
+						}
+						else if ( is_array( $support ) ) {
+							// Removing any previously set post type support in order to set the support,
+							// not just add additional post type support.
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $support );
+						}
+					}
+
+					$feature = 'responsive-embeds';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'starter-content';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\remove_theme_support( $feature );
+							\add_theme_support( $feature, $theme_supports[$feature] );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'title-tag';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'wp-block-styles';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( $theme_supports[$feature] === true ) {
+							\add_theme_support( $feature );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+
+					$feature = 'widgets';
+					if ( isset( $theme_supports[$feature] ) ) {
+						if ( is_array( $theme_supports[$feature] ) ) {
+							\add_action( 'widgets_init', function () use ( $feature, $theme_supports ) {
+								\remove_theme_support( $feature );
+								foreach ( $theme_supports[$feature] as $widget ) {
+									\register_sidebar($widget);
+								}
+							} );
+						}
+						else if ( $theme_supports[$feature] === false ) {
+							\remove_theme_support( $feature );
+						}
+					}
+				}
+			} );
 		}
 
 		// phpcs:disable Generic.Files.LineLength.MaxExceeded
