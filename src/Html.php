@@ -42,7 +42,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\Html' ) ) {
 		* @param array $attrs {
 		* 	The attributes.
 		*
-		* 	@type string $attr[i] Optional. An attribute.
+		* 	@type bool|string $attr[i] Optional. An attribute.
 		* }
 		*
 		* @return string The attributes array converted to a single line of HTML.
