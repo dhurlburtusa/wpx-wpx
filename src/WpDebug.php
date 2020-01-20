@@ -114,49 +114,49 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpDebug' ) ) {
 		* This is usually done in `wp-config.php`.
 		*
 		* @param array $config {
-		*     Optional. The configuration.
+		* 	Optional. The configuration.
 		*
-		*     @type array $mu_plugins {
-		*       Optional. The must-use plugin configuration.
+		* 	@type array $mu_plugins {
+		* 		Optional. The must-use plugin configuration.
 		*
-		*       @type bool $load_time Optional. Flag indicating whether to track and log the time
-		*         each must-use plugin takes to load.
-		*       @type bool $memory_delta Optional. Flag indicating whether to track and log the
-		*         change in memory usage for each loaded must-use plugin.
-		*     }
-		*     @type array $network_plugins {
-		*       Optional. The network plugin configuration. (Only applies in a multi-site setup.)
+		* 		@type bool $load_time Optional. Flag indicating whether to track and log the time
+		* 			each must-use plugin takes to load.
+		* 		@type bool $memory_delta Optional. Flag indicating whether to track and log the
+		* 			change in memory usage for each loaded must-use plugin.
+		* 	}
+		* 	@type array $network_plugins {
+		* 		Optional. The network plugin configuration. (Only applies in a multi-site setup.)
 		*
-		*       @type bool $load_time Optional. Flag indicating whether to track and log the time
-		*         each network plugin takes to load.
-		*       @type bool $memory_delta Optional. Flag indicating whether to track and log the
-		*         change in memory usage for each loaded network plugin.
-		*     }
-		*     @type array $plugins {
-		*       Optional. The regular plugin configuration.
+		* 		@type bool $load_time Optional. Flag indicating whether to track and log the time
+		* 			each network plugin takes to load.
+		* 		@type bool $memory_delta Optional. Flag indicating whether to track and log the
+		* 			change in memory usage for each loaded network plugin.
+		* 	}
+		* 	@type array $plugins {
+		* 		Optional. The regular plugin configuration.
 		*
-		*       @type bool $load_time Optional. Flag indicating whether to track and log the time
-		*         each regular plugin takes to load.
-		*       @type bool $memory_delta Optional. Flag indicating whether to track and log the
-		*         change in memory usage for each loaded regular plugin.
-		*     }
-		*     @type array $request {
-		*       Optional. The request configuration.
+		* 		@type bool $load_time Optional. Flag indicating whether to track and log the time
+		* 			each regular plugin takes to load.
+		* 		@type bool $memory_delta Optional. Flag indicating whether to track and log the
+		* 			change in memory usage for each loaded regular plugin.
+		* 	}
+		* 	@type array $request {
+		* 		Optional. The request configuration.
 		*
-		*       @type bool $execution_time Optional. Flag indicating whether to track and log the
-		*         execution time of the request.
-		*       @type bool $peak_memory_use Optional. Flag indicating whether to track and log the
-		*         peak memory usage of the request.
-		*     }
-		*     @type array $theme {
-		*       Optional. The theme configuration.
+		* 		@type bool $execution_time Optional. Flag indicating whether to track and log the
+		* 			execution time of the request.
+		* 		@type bool $peak_memory_use Optional. Flag indicating whether to track and log the
+		* 			peak memory usage of the request.
+		* 	}
+		* 	@type array $theme {
+		* 		Optional. The theme configuration.
 		*
-		*       @type bool $load_time Optional. Flag indicating whether to track and log the time
-		*         the theme (both child and parent if applicable) takes to load.
-		*       @type bool $memory_delta Optional. Flag indicating whether to track and log the
-		*         change in memory usage for loading the theme (both child and parent if
-		*         applicable).
-		*     }
+		* 		@type bool $load_time Optional. Flag indicating whether to track and log the time
+		* 			the theme (both child and parent if applicable) takes to load.
+		* 		@type bool $memory_delta Optional. Flag indicating whether to track and log the
+		* 			change in memory usage for loading the theme (both child and parent if
+		* 			applicable).
+		* 	}
 		* }
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps

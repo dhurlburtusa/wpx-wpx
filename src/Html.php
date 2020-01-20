@@ -40,9 +40,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\Html' ) ) {
 		* data type of the attribute's value.
 		*
 		* @param array $attrs {
-		*     The attributes.
+		* 	The attributes.
 		*
-		*     @type string $attr[i] Optional. An attribute.
+		* 	@type string $attr[i] Optional. An attribute.
 		* }
 		*
 		* @return string The attributes array converted to a single line of HTML.

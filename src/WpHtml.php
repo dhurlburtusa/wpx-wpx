@@ -18,10 +18,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: Use the standard `body_class` filter to filter the `class` attribute.
 		*
 		* @param array $attrs {
-		*     The `body` tag attributes.
+		* 	The `body` tag attributes.
 		*
-		*     @type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
-		*     	Defaults to `''`.
+		* 	@type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
+		* 		Defaults to `''`.
 		* }
 		*
 		* @return string
@@ -65,36 +65,36 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*     ]);
 		*
 		* @param array $config {
-		*     The WP HTML response configuration.
+		* 	The WP HTML response configuration.
 		*
-		*     @type false $adjacent_posts_link Optional. Flag indicating whether to include
-		*     	any adjacent post links when applicable.
-		*     @type false $canonical_link Optional. Flag indicating whether to include
-		*     	any a canonical link when applicable.
-		*     @type false|string $generator_meta Optional. Flag indicating whether to include
-		*     	the standard WordPress generator meta tag or to set the generator to a specific
-		*     	value. Defaults to false.
-		*     @type true|string $meta_charset Optional. Set the meta charset value. Defaults
-		*     	to true which means use the value from the WordPress settings which defaults
-		*     	to UTF-8.
-		*     @type true|string $meta_viewport Optional. Set the meta viewport value. Defaults
-		*     	to true which means use the default viewport settings. See
-		*     	`WpHtml::set_meta_viewport` for more information.
-		*     @type true|string $pingback_link Optional. Flag indicating whether to include
-		*     	the pingback link on the appropriate pages or the pingback URL to use.
-		*     @type string $profile_link Optional. The URL to use for a profile link.
-		*     @type false $rest_link Optional. Flag indicating whether to include a REST API
-		*     	link in the document head. Defaults to true.
-		*     @type false $rsd_link Optional. Flag indicating whether to include an RSD link in
-		*     	the document head. Defaults to false.
-		*     @type string[] $scripts Optional. Handles of pre-registered scripts. Defaults to
-		*     	null.
-		*     @type string[] $styles Optional. Handles of pre-registered styles. Defaults to
-		*     	null.
-		*     @type false $shortlink_link Optional. Flag indicating whether to include a short
-		*     	link in the document head. Defaults to false.
-		*     @type false $wlwmanifest_link Optional. Flag indicating whether to include a
-		*     	Windows Live Writer (WLW) manifest link in the document head. Defaults to false.
+		* 	@type false $adjacent_posts_link Optional. Flag indicating whether to include
+		* 		any adjacent post links when applicable.
+		* 	@type false $canonical_link Optional. Flag indicating whether to include
+		* 		any a canonical link when applicable.
+		* 	@type false|string $generator_meta Optional. Flag indicating whether to include
+		* 		the standard WordPress generator meta tag or to set the generator to a specific
+		* 		value. Defaults to false.
+		* 	@type true|string $meta_charset Optional. Set the meta charset value. Defaults
+		* 		to true which means use the value from the WordPress settings which defaults
+		* 		to UTF-8.
+		* 	@type true|string $meta_viewport Optional. Set the meta viewport value. Defaults
+		* 		to true which means use the default viewport settings. See
+		* 		`WpHtml::set_meta_viewport` for more information.
+		* 	@type true|string $pingback_link Optional. Flag indicating whether to include
+		* 		the pingback link on the appropriate pages or the pingback URL to use.
+		* 	@type string $profile_link Optional. The URL to use for a profile link.
+		* 	@type false $rest_link Optional. Flag indicating whether to include a REST API
+		* 		link in the document head. Defaults to true.
+		* 	@type false $rsd_link Optional. Flag indicating whether to include an RSD link in
+		* 		the document head. Defaults to false.
+		* 	@type string[] $scripts Optional. Handles of pre-registered scripts. Defaults to
+		* 		null.
+		* 	@type string[] $styles Optional. Handles of pre-registered styles. Defaults to
+		* 		null.
+		* 	@type false $shortlink_link Optional. Flag indicating whether to include a short
+		* 		link in the document head. Defaults to false.
+		* 	@type false $wlwmanifest_link Optional. Flag indicating whether to include a
+		* 		Windows Live Writer (WLW) manifest link in the document head. Defaults to false.
 		* }
 		*/
 		public static function configure ( $config = array() ) {
@@ -266,10 +266,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Gets the `html` tag's attributes.
 		*
 		* @param array $attrs {
-		*     The `html` tag attributes.
+		* 	The `html` tag attributes.
 		*
-		*     @type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
-		*     	Defaults to `''`.
+		* 	@type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
+		* 		Defaults to `''`.
 		* }
 		*
 		* @return string
@@ -652,10 +652,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Note: Use the standard `body_class` filter to filter the `class` attribute.
 		*
 		* @param array $attrs {
-		*     The `body` tag attributes.
+		* 	The `body` tag attributes.
 		*
-		*     @type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
-		*     	Defaults to `''`.
+		* 	@type string|string[] $class Optional. CSS class(es) to add to the `body` tag.
+		* 		Defaults to `''`.
 		* }
 		*
 		* @see Wpx\Wpx\v0\WpHtml::body_attrs
@@ -670,10 +670,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* Outputs the `html` tag's attributes.
 		*
 		* @param array $attrs {
-		*     The `html` tag attributes.
+		* 	The `html` tag attributes.
 		*
-		*     @type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
-		*     	Defaults to `''`.
+		* 	@type string|string[] $class Optional. CSS class(es) to add to the `html` tag.
+		* 		Defaults to `''`.
 		* }
 		*
 		* @see Wpx\Wpx\v0\Html::attrs
