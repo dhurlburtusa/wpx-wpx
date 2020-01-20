@@ -554,7 +554,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		}
 
 		/**
-		 * Sets the profile link to the specified value.
+		* Sets the profile link to the specified value.
 		*
 		* Must be called before the theme calls `wp_head`.
 		*
@@ -562,11 +562,11 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		* function.
 		*
 		* @param string $profile_url Optional. The profile URL.
-		 */
+		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function set_profile_link ( $profile_url ) {
 			\add_action( 'wp_head', function () use ( $profile_url ) {
-				echo '<link rel="profile" href="' . \esc_attr( $profile_url ) . '">' . "\n";
+				echo '<link rel="profile" href="' . \esc_url( $profile_url ) . '">' . "\n";
 			}, 3 );
 		}
 
