@@ -215,16 +215,18 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function register_script ( $script ) {
-			$handle = $script['handle'];
-			$src = $script['src'];
-			$deps = \is_array( $script['deps'] ) ? $script['deps'] : array();
-			$in_footer = isset( $script['in_footer'] ) ? $script['in_footer'] : true;
-			$ver = isset( $script['ver'] ) ? $script['ver'] : null;
-			\wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+			\add_action( 'wp_enqueue_scripts', function () use ( $script ) {
+				$handle = $script['handle'];
+				$src = $script['src'];
+				$deps = isset( $script['deps'] ) && \is_array( $script['deps'] ) ? $script['deps'] : array();
+				$in_footer = isset( $script['in_footer'] ) ? $script['in_footer'] : true;
+				$ver = isset( $script['ver'] ) ? $script['ver'] : null;
+				\wp_register_script( $handle, $src, $deps, $ver, $in_footer );
 
-			if ( \is_string( $script['conditional'] ) ) {
-				\wp_script_add_data( $handle, 'conditional', $script['conditional'] );
-			}
+				if ( isset( $script['conditional'] ) && \is_string( $script['conditional'] ) ) {
+					\wp_script_add_data( $handle, 'conditional', $script['conditional'] );
+				}
+			} );
 		}
 
 		/**
@@ -255,12 +257,14 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		*/
 		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 		public static function register_style ( $style ) {
-			$handle = $style['handle'];
-			$src = $style['src'];
-			$deps = \is_array( $style['deps'] ) ? $style['deps'] : array();
-			$ver = isset( $style['ver'] ) ? $style['ver'] : null;
-			$media = isset( $style['media'] ) ? $style['media'] : 'all';
-			\wp_register_style( $handle, $src, $deps, $ver, $media );
+			\add_action( 'wp_enqueue_scripts', function () use ( $style ) {
+				$handle = $style['handle'];
+				$src = $style['src'];
+				$deps = isset( $style['deps'] ) && \is_array( $style['deps'] ) ? $style['deps'] : array();
+				$ver = isset( $style['ver'] ) ? $style['ver'] : null;
+				$media = isset( $style['media'] ) ? $style['media'] : 'all';
+				\wp_register_style( $handle, $src, $deps, $ver, $media );
+			} );
 		}
 
 		/**
