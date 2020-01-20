@@ -87,4 +87,8 @@ final class WpConfigTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpConfig', 'configure_xmlrpc' ) );
 	}
 
+	public function test_has_enable_text_widget_shortcodes_method(): void {
+		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpConfig', 'enable_text_widget_shortcodes' ) );
+	}
+
 }

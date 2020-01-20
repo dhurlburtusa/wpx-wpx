@@ -219,16 +219,6 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtml' ) ) {
 		}
 
 		/**
-		* Enables shortcodes in the text widget.
-		*
-		* By default, the WP text widget does not recognize shortcodes.
-		*/
-		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-		public static function enable_text_widget_shortcodes () {
-			\add_filter( 'widget_text', 'do_shortcode' );
-		}
-
-		/**
 		* Convenience function for enqueuing pre-registered scripts.
 		*
 		* Must be called before the theme calls `wp_head`.

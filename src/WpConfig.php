@@ -79,6 +79,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*     		'must_be_authenticated' => true,
 		*     	],
 		*     	'self_pinging' => false,
+		*     	'text_widget_shortcodes' => true,
 		*     	'texturization' => false,
 		*     	'trash' => 60,
 		*     	'wp_cron' => [
@@ -125,6 +126,8 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*       `WpConfig::configure_rest_api` for details.
 		*     @type array|false $self_pinging Optional. The self-pinging configuration. See
 		*       `WpConfig::configure_self_pinging` for details.
+		*     @type bool $text_widget_shortcodes Optional. Flag indicating whether to allow
+		*       processing of shortcodes in the WP text widgets. Defaults to `false`.
 		*     @type array|false $texturization Optional. The WP texturization configuration. See
 		*       `WpConfig::configure_texturization` for details.
 		*     @type array|int $trash Optional. The WP trash configuration. See
@@ -151,6 +154,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			$post_revisions_config = isset( $config['post_revisions'] ) ? $config['post_revisions'] : null;
 			$rest_api_config = isset( $config['rest_api'] ) ? $config['rest_api'] : null;
 			$self_pinging_config = isset( $config['self_pinging'] ) ? $config['self_pinging'] : true;
+			$text_widget_shortcodes = isset( $config['text_widget_shortcodes'] ) ? $config['text_widget_shortcodes'] : false;
 			$texturization_config = isset( $config['texturization'] ) ? $config['texturization'] : true;
 			$trash_config = isset( $config['trash'] ) ? $config['trash'] : true;
 			$wp_cron_config = isset( $config['wp_cron'] ) ? $config['wp_cron'] : null;
@@ -179,6 +183,10 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 			self::configure_rest_api( $rest_api_config );
 
 			self::configure_self_pinging( $self_pinging_config );
+
+			if ( $text_widget_shortcodes === true ) {
+				self::enable_text_widget_shortcodes();
+			}
 
 			self::configure_texturization( $texturization_config );
 
@@ -1266,6 +1274,16 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 				// 	return false;
 				// }, 100 );
 			}
+		}
+
+		/**
+		* Enables shortcodes in the text widget.
+		*
+		* By default, the WP text widget does not recognize shortcodes.
+		*/
+		// phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+		public static function enable_text_widget_shortcodes () {
+			\add_filter( 'widget_text', 'do_shortcode' );
 		}
 
 	} // eo class WpConfig

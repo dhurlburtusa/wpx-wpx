@@ -1,6 +1,5 @@
 # TODOs
 
-- Move WpHtml::enable_text_widget_shortcodes to WpConfig.
 - Move WpHtml::configure to WpHtmlHead::configure.
 	+ Move WpHtml::remove_adjacent_posts_link to WpHtmlHead::remove_adjacent_posts_link.
 	+ Move WpHtml::remove_canonical_link to WpHtmlHead::remove_canonical_link.

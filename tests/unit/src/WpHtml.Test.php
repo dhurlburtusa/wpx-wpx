@@ -67,10 +67,6 @@ final class WpHtmlTest extends TestCase {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'dequeue_styles' ) );
 	}
 
-	public function test_WpHtml_has_enable_text_widget_shortcodes_method(): void {
-		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'enable_text_widget_shortcodes' ) );
-	}
-
 	public function test_WpHtml_has_enqueue_scripts_method(): void {
 		$this->assertEquals( true, \method_exists( 'Wpx\Wpx\v0\WpHtml', 'enqueue_scripts' ) );
 	}
