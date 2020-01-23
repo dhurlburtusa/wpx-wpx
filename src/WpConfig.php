@@ -56,7 +56,14 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		/**
 		* Configures WP behavior and functionality.
 		*
+		* Note: Should be called early in the request but not in `wp-config.php` (the core
+		* of WordPress must be loaded). Ideally, this will be called in a must-use plugin.
+		* Must not be called too late either. Many configurations won't take effect if
+		* called after the theme has called `wp_head`.
+		*
 		* **Example Usage**
+		*
+		*     use \Wpx\Wpx\v0\WpConfig;
 		*
 		*     WpConfig::configure([
 		*     	'autop' => false,
@@ -1004,13 +1011,9 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Of course updating the command with your own domain.
 		*
-		* Note: MUST be called in a plugin whether it be a must-use plugin, a network
-		* plugin, or a normal/standard plugin. Otherwise, the autosave interval will
-		* default to the WP default of 60 seconds.
-		*
 		* Note: Both `WP_DEBUG` and `WP_DEBUG_LOG` must be defined as true when
 		* `$config['log_execution']` is true in order for the log entry to show in
-		* `wp-content/debug.log`.
+		* `wp-content/debug.log` or whatever directory `WP_DEBUG_LOG` is configured to.
 		*
 		* @param array $config {
 		* 	WP-Cron configuration.
@@ -1122,7 +1125,7 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpConfig' ) ) {
 		*
 		* Note: Both `WP_DEBUG` and `WP_DEBUG_LOG` must be defined as true when
 		* `$config['log_queries']` is true in order for the log entry to show in
-		* `wp-content/debug.log`.
+		* `wp-content/debug.log` or whatever directory `WP_DEBUG_LOG` is configured to.
 		*
 		* @param array $config {
 		* 	WP-DB configuration.
