@@ -236,6 +236,8 @@ if ( ! \class_exists( __NAMESPACE__ . '\WpHtmlHead' ) ) {
 				self::set_charset_meta( $values['charset_meta'] );
 			}
 
+			// Note: $values['content'] is reserved since it is expected in Wtf\Wp\v0\Elements\HtmlHead.
+
 			if ( isset( $values['generator_meta'] ) ) {
 				self::set_generator_meta( $values['generator_meta'] );
 			}
