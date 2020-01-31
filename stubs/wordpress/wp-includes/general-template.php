@@ -15,3 +15,9 @@ function get_template_part( $slug, $name = null ) {
 
 function wp_head() {
 }
+
+function wp_footer() {
+}
+
+function wp_body_open() {
+}

@@ -1,4 +1,5 @@
 <?php
+
 if ( ! defined( 'CUSTOM_TAGS' ) ) {
 	define( 'CUSTOM_TAGS', false );
 }
